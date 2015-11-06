@@ -1,6 +1,6 @@
 import cv2
 from time import time
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 #set a new resolution
 cap.set(3,640)
@@ -23,7 +23,7 @@ while(True):
     
     #if the 'c' key is pressed
     if cv2.waitKey(1) & 0xFF == ord('c'):
-        cv2.imwrite('image.png', frame)
+        cv2.imwrite('height.png', frame)
         print "photo taken at",time()
         break
 

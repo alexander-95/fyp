@@ -1,12 +1,11 @@
 import numpy as np
 import cv2
 import math
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import axes3d
 
 #returns rotational matrix from euler angles
 def eulerToR((alpha, beta, gamma)):
-    #alpha = math.radians(alpha)
-    #beta = math.radians(beta)
-    #gamma = math.radians(gamma)
     Rz = np.matrix(((math.cos(gamma), -math.sin(gamma), 0),
                     (math.sin(gamma), math.cos(gamma), 0),
                     (0,0,1)))
@@ -52,11 +51,59 @@ def expToT((X, Y, Z, w1, w2, w3)):
                     (0, 0, 0, 1)))
      return T
 
-R = eulerToR((90, 0, 0))
-print R
-print ''
-T = eulerToT((1, 2, 3, 90, 0, 0))
-print T
-print ''
-R = expToR((90, 0, 0))
+#produces a k matrix from  intrinsic parameters
+def intrinsicToK(fx, fy, x0, y0, s):
+    K = np.matrix(((fx, s, x0),
+                    (0, fy, y0),
+                    (0, 0, 1)))
+    return K
+
+def simulateCamera():
+    p = np.matrix(((-1, -1, 0, 0, 1, 1),
+                    (-2, -2, -2, -2, -2, -2),
+                    (80, 1, 80, 1, 80, 1)))
+    K = intrinsicToK(2, 2, 0, 0, 0)
+    #print p
+    p = K.dot(p)
+    #print p
+    for i in range(3):
+        x1 = float(p.item(0, i*2))/p.item(2, i*2)
+        x2 = float(p.item(0, i*2+1))/p.item(2, i*2+1)
+        y1 = float(p.item(1, i*2))/p.item(2, i*2)
+        y2 = float(p.item(1, i*2+1))/p.item(2, i*2+1)
+        #print x1,',',y1,x2,',',y2
+        plt.plot((x1, x2),(y1, y2), 'k-')# (p.item(2, i*2), p.item(2, i*2+1)), 'k-')
+
+    plt.show()
+
+def loadCalibData(datafile):
+    data = np.loadtxt(datafile)
+    
+    #solve system of linear equations for K matrix
+    for line in data:
+        for num in line:
+            print num,
+        print
+
+    fig = plt.figure()
+    ax = fig.gca(projection="3d")
+    ax.plot(data[:,0], data[:,1], data[:,2],'k.')
+
+    fig = plt.figure()
+    ax = fig.gca()
+    ax.plot(data[:,3], data[:,4],'r.')
+
+    plt.show()
+
+loadCalibData('data.txt')
+
+#R = eulerToR((90, 0, 0))
+#print R
+#print ''
+#T = eulerToT((1, 2, 3, 90, 0, 0))
+#print T
+#print ''
+#R = expToR((90, 0, 0))
+
+simulateCamera()
 

@@ -53,24 +53,27 @@ def expToT((X, Y, Z, w1, w2, w3)):
 
 #produces a k matrix from  intrinsic parameters
 def intrinsicToK(fx, fy, x0, y0, s):
-    K = np.matrix(((fx, s, x0),
-                    (0, fy, y0),
-                    (0, 0, 1)))
+    K = np.matrix(((fx, s, x0, 0),
+                    (0, fy, y0, 0),
+                    (0, 0, 1, 0)))
     return K
 
 def simulateCamera():
+    Camera = eulerToT((0, 0, 5, np.pi*1, 0.0, 0))
     p = np.matrix(((-1, -1, 0, 0, 1, 1),
-                    (-2, -2, -2, -2, -2, -2),
-                    (80, 1, 80, 1, 80, 1)))
+                    (0, 0, 0, 0, 0, 0),
+                    (80, 1, 80, 1, 80, 1),
+                    (1,1,1,1,1,1)))
     K = intrinsicToK(2, 2, 0, 0, 0)
     #print p
+    p = Camera.dot(p)
     p = K.dot(p)
     #print p
     for i in range(3):
-        x1 = float(p.item(0, i*2))/p.item(2, i*2)
-        x2 = float(p.item(0, i*2+1))/p.item(2, i*2+1)
-        y1 = float(p.item(1, i*2))/p.item(2, i*2)
-        y2 = float(p.item(1, i*2+1))/p.item(2, i*2+1)
+        x1 = float(p.item(0, i*2))#/p.item(2, i*2)
+        x2 = float(p.item(0, i*2+1))#/p.item(2, i*2+1)
+        y1 = float(p.item(1, i*2))#/p.item(2, i*2)
+        y2 = float(p.item(1, i*2+1))#/p.item(2, i*2+1)
         #print x1,',',y1,x2,',',y2
         plt.plot((x1, x2),(y1, y2), 'k-')# (p.item(2, i*2), p.item(2, i*2+1)), 'k-')
 
@@ -95,7 +98,7 @@ def loadCalibData(datafile):
 
     plt.show()
 
-loadCalibData('data.txt')
+#loadCalibData('data.txt')
 
 #R = eulerToR((90, 0, 0))
 #print R

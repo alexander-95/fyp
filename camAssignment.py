@@ -65,6 +65,7 @@ def simulateCamera():
                     (80, 1, 80, 1, 80, 1),
                     (1,1,1,1,1,1)))
     K = intrinsicToK(2, 2, 0, 0, 0)
+    #K = K.eulerToR()
     #print p
     p = Camera.dot(p)
     p = K.dot(p)
@@ -83,10 +84,31 @@ def loadCalibData(datafile):
     data = np.loadtxt(datafile)
     
     #solve system of linear equations for K matrix
-    for line in data:
-        for num in line:
-            print num,
-        print
+    #a = np.matrix((data))
+    #print a
+    a = np.matrix(((0,0,0)))
+    b = np.matrix(((0)))
+    #for line in data:
+    for i in xrange(3):
+        line = data[i]
+        X = line[0]
+        Y = line[1]
+        Z = line[2]
+        x = line[3]
+        y = line[4]
+
+        a = np.vstack([a,[X,Y,Z]])
+        b = np.vstack([b,[x*Z]])
+        #print X
+        #for num in line:
+        #    print num,
+        #print
+    a = np.delete(a, (0), axis=0)
+    b = np.delete(b, (0), axis=0)
+    print a
+    print b
+    c = np.linalg.solve(a,b)
+    print c
 
     fig = plt.figure()
     ax = fig.gca(projection="3d")

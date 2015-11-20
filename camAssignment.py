@@ -26,7 +26,7 @@ def expToR((w1, w2, w3)):
     wh = np.matrix(((0, -w3,w2 ),(w3, 0, -w1),(-w2, w1, 0)))
 
     I = np.matrix(((1, 0, 0),
-                     (0, 1, 0),
+                    (0, 1, 0),
                     (0, 0, 1)))
 
     length = np.power(w1*w1 + w2*w2 + w3*w3,1/3.0)
@@ -59,7 +59,7 @@ def intrinsicToK(fx, fy, x0, y0, s):
     return K
 
 def simulateCamera():
-    Camera = eulerToT((0, 0, 5, np.pi*1, 0.0, 0))
+    Camera = eulerToT((0, 0, 2, np.pi*-0.4, 0.0, 0))
     p = np.matrix(((-1, -1, 0, 0, 1, 1),
                     (0, 0, 0, 0, 0, 0),
                     (80, 1, 80, 1, 80, 1),
@@ -67,14 +67,14 @@ def simulateCamera():
     K = intrinsicToK(2, 2, 0, 0, 0)
     #K = K.eulerToR()
     #print p
+    Camera = K.dot(Camera)
     p = Camera.dot(p)
-    p = K.dot(p)
     #print p
     for i in range(3):
-        x1 = float(p.item(0, i*2))#/p.item(2, i*2)
-        x2 = float(p.item(0, i*2+1))#/p.item(2, i*2+1)
-        y1 = float(p.item(1, i*2))#/p.item(2, i*2)
-        y2 = float(p.item(1, i*2+1))#/p.item(2, i*2+1)
+        x1 = float(p.item(0, i*2))/p.item(2, i*2)
+        x2 = float(p.item(0, i*2+1))/p.item(2, i*2+1)
+        y1 = float(p.item(1, i*2))/p.item(2, i*2)
+        y2 = float(p.item(1, i*2+1))/p.item(2, i*2+1)
         #print x1,',',y1,x2,',',y2
         plt.plot((x1, x2),(y1, y2), 'k-')# (p.item(2, i*2), p.item(2, i*2+1)), 'k-')
 

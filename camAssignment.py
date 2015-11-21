@@ -59,10 +59,10 @@ def intrinsicToK(fx, fy, x0, y0, s):
     return K
 
 def simulateCamera():
-    Camera = eulerToT((0, 0, 2, np.pi*-0.4, 0.0, 0))
-    p = np.matrix(((-1, -1, 0, 0, 1, 1),
+    Camera = eulerToT((0, 0, 2, np.pi*0.5, np.pi*0, np.pi*0.5))#pitch, roll, yaw
+    p = np.matrix(((80, 1, 80, 1, 80, 1),
+                    (-1, -1, 0, 0, 1, 1),
                     (0, 0, 0, 0, 0, 0),
-                    (80, 1, 80, 1, 80, 1),
                     (1,1,1,1,1,1)))
     K = intrinsicToK(2, 2, 0, 0, 0)
     #K = K.eulerToR()
@@ -97,7 +97,7 @@ def loadCalibData(datafile):
 
     plt.show()
 
-loadCalibData('data.txt')
+#loadCalibData('data.txt')
 
 #R = eulerToR((90, 0, 0))
 #print R
@@ -107,5 +107,5 @@ loadCalibData('data.txt')
 #print ''
 #R = expToR((90, 0, 0))
 
-#simulateCamera()
+simulateCamera()
 

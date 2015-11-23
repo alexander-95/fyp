@@ -1,5 +1,3 @@
-""" Example of using OpenCV API to detect and draw checkerboard pattern"""
-
 import numpy as np
 import cv2
 
@@ -14,7 +12,8 @@ objp = np.zeros((WIDTH*HEIGHT,3), np.float32)
 objp[:,:2] = np.mgrid[0:HEIGHT,0:WIDTH].T.reshape(-1,2)
 
 cap = cv2.VideoCapture(0)
-
+avg = 0
+count = 0
 
 
 while (True):
@@ -34,16 +33,23 @@ while (True):
         # If found, add object points, image points (after refining them)
         if ret == True:
             cv2.cornerSubPix(gray,corners,(11,11),(-1,-1),criteria)
-            print 'found checkerboard'
-
+            
             # Draw and display the corners
             cv2.drawChessboardCorners(img, (HEIGHT,WIDTH), corners,ret)
+            #intrinsic matrix, distortion coefficients, rodrigues rotation vectors, translation vectors
             ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1],None,None)
-            print 'matrix =', mtx
+            #print 'matrix =', mtx
+            print mtx.item(4)
+            avg+=mtx.item(4)
+            count+=1
+            #h,  w = img.shape[:2]
+            #newcameramtx, roi=cv2.getOptimalNewCameraMatrix(mtx,dist,(w,h),1,(w,h))
+            #img = cv2.undistort(img, mtx, dist, None, newcameramtx)
 
         cv2.imshow('img',img)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
+            print 'focal length =',avg/count
             break
 
 # release everything

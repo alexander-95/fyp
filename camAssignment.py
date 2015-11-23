@@ -18,7 +18,7 @@ def eulerToR((alpha, beta, gamma)):
                     (0, math.cos(alpha), -math.sin(alpha)),
                     (0, math.sin(alpha), math.cos(alpha))))
 
-    R = Rx.dot(Ry).dot(Rz)
+    R = (Rz.dot(Ry)).dot(Rx)
     return R
 
 #returns rotational matrix from exponential coordinates
@@ -59,7 +59,7 @@ def intrinsicToK(fx, fy, x0, y0, s):
     return K
 
 def simulateCamera():
-    Camera = eulerToT((0, 0, 2, np.pi*0.5, np.pi*0, np.pi*0.5))#pitch, roll, yaw
+    Camera = eulerToT((0, 0, 2, np.pi*1.0, np.pi*-0.4, np.pi*0.5))#yaw, roll, pitch
     p = np.matrix(((80, 1, 80, 1, 80, 1),
                     (-1, -1, 0, 0, 1, 1),
                     (0, 0, 0, 0, 0, 0),
@@ -68,6 +68,7 @@ def simulateCamera():
     #K = K.eulerToR()
     #print p
     Camera = K.dot(Camera)
+    print Camera
     p = Camera.dot(p)
     #print p
     for i in range(3):
@@ -83,9 +84,45 @@ def simulateCamera():
 def loadCalibData(datafile):
     data = np.loadtxt(datafile)
     
-    #solve system of linear equations for K matrix
     a = np.matrix((data))
-    print a
+
+    first = True
+    f = 1
+    for line in data:
+        X = line[0]
+        Y = line[1]
+        Z = line[2]
+        x = line[3]
+        y = line[4]
+
+        if first:
+            #A = np.matrix(((f*X, f*Y, f*Z, 0, 0, 0, x*X, x*Y, x*Z, f, 0, x),
+            #                (0, 0, 0, f*X, f*Y, f*Z, y*X, y*Y, y*Z, 0, f, y)))
+            A = np.matrix(((X, Y, Z, 1, 0, 0, 0, 0, -x*X, -x*Y, -x*Z, -x),
+                            (0, 0, 0, 0, X, Y, Z, 1, -y*X, -y*Y, -y*Z, -y)))
+            first = False
+        else:
+            #newrow = [f*X, f*Y, f*Z, 0, 0, 0, x*X, x*Y, x*Z, f, 0, x]
+            newrow = [X, Y, Z, 1, 0, 0, 0, 0, -x*X, -x*Y, -x*Z, -x]
+            #print newrow
+            A = np.vstack([A, newrow])
+            #newrow = [0, 0, 0, f*X, f*Y, f*Z, y*X, y*Y, y*Z, 0, f, y]
+            newrow = [0, 0, 0, 0, X, Y, Z, 1, -y*X, -y*Y, -y*Z, -y]
+            #print newrow
+            A = np.vstack([A, newrow])
+        
+    A = (A.T).dot(A)
+    eigenvalue, eigenvector = np.linalg.eig(A)
+    #print 'eigenvalues = ',eigenvalue
+    #print 'eigenvectors =', eigenvector
+    e = eigenvector[np.argmin(eigenvalue)]
+    #print eigenvector
+    print e
+    camera = np.matrix(((e.item(0), e.item(1), e.item(2),e.item(9)),
+                        (e.item(3), e.item(4), e.item(5),e.item(10)),
+                        (e.item(6), e.item(7), e.item(8),e.item(11))))
+                        #(0,0,0,1)))
+    print camera
 
     fig = plt.figure()
     ax = fig.gca(projection="3d")
@@ -94,10 +131,21 @@ def loadCalibData(datafile):
     fig = plt.figure()
     ax = fig.gca()
     ax.plot(data[:,3], data[:,4],'r.')
-
+    
+    for line in data:
+        X = line[0]
+        Y = line[1]
+        Z = line[2]
+        vector = np.matrix(((X),(Y),(Z)))
+        #print vector.T
+        #vector = camera.dot(vector.T)
+        vector = camera.T.dot(vector.T)
+        #print vector
+        #print vector.item(0), vector.item(1), vector.item(2)
+        ax.plot(vector.item(0)/vector.item(2),vector.item(1)/vector.item(2), 'g.')
     plt.show()
 
-#loadCalibData('data.txt')
+loadCalibData('data.txt')
 
 #R = eulerToR((90, 0, 0))
 #print R
@@ -107,5 +155,5 @@ def loadCalibData(datafile):
 #print ''
 #R = expToR((90, 0, 0))
 
-simulateCamera()
+#simulateCamera()
 

@@ -1,8 +1,8 @@
 import cv2
 from time import time
 
-capL = cv2.VideoCapture(2)
-capR = cv2.VideoCapture(1)
+capL = cv2.VideoCapture(1)
+capR = cv2.VideoCapture(0)
 
 while True:
     retL, frameL = capL.read()
@@ -14,8 +14,8 @@ while True:
     frameL = cv2.GaussianBlur(frameL,(5,5),0)
     frameR = cv2.GaussianBlur(frameR,(5,5),0)
 
-    cv2.threshold(frameL, 60, 255, cv2.THRESH_BINARY, frameL)
-    cv2.threshold(frameR, 60, 255, cv2.THRESH_BINARY, frameR)
+    #cv2.threshold(frameL, 60, 255, cv2.THRESH_BINARY, frameL)
+    #cv2.threshold(frameR, 60, 255, cv2.THRESH_BINARY, frameR)
 
     contoursL, hierarchyL = cv2.findContours(frameL.copy(), cv2.RETR_LIST,cv2.CHAIN_APPROX_NONE)
     momentsL = [cv2.moments(cnt) for cnt in contoursL]

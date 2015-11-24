@@ -59,7 +59,10 @@ def intrinsicToK(fx, fy, x0, y0, s):
     return K
 
 def simulateCamera():
-    Camera = eulerToT((0, 0, 2, np.pi*1.0, np.pi*-0.4, np.pi*0.5))#yaw, roll, pitch
+    #Camera = eulerToT((0, 0, 2, np.pi*1.0, np.pi*-0.4, np.pi*0.5))#yaw, roll, pitch
+    Camera = eulerToT((0, 0, 2, np.pi*0.5, np.pi*-0.0, np.pi*0.0))#yaw, roll, pitch
+    Camera =Camera.dot(eulerToT((0, 0, 0, np.pi*0.0, np.pi*0.0, np.pi*0.5)))#yaw, roll, pitch
+    
     p = np.matrix(((80, 1, 80, 1, 80, 1),
                     (-1, -1, 0, 0, 1, 1),
                     (0, 0, 0, 0, 0, 0),
@@ -87,7 +90,6 @@ def loadCalibData(datafile):
     a = np.matrix((data))
 
     first = True
-    f = 1
     for line in data:
         X = line[0]
         Y = line[1]
@@ -113,16 +115,17 @@ def loadCalibData(datafile):
         
     A = (A.T).dot(A)
     eigenvalue, eigenvector = np.linalg.eig(A)
-    #print 'eigenvalues = ',eigenvalue
-    #print 'eigenvectors =', eigenvector
+    print 'eigenvalues = ',eigenvalue
+    print 'eigenvectors =', eigenvector
     e = eigenvector[np.argmin(eigenvalue)]
+    e = eigenvector[10]
     #print eigenvector
-    print e
+    #print e
     camera = np.matrix(((e.item(0), e.item(1), e.item(2),e.item(9)),
                         (e.item(3), e.item(4), e.item(5),e.item(10)),
-                        (e.item(6), e.item(7), e.item(8),e.item(11))))
-                        #(0,0,0,1)))
-    print camera
+                        (e.item(6), e.item(7), e.item(8),e.item(11)),
+                        (0,0,0,1)))
+    #print camera
 
     fig = plt.figure()
     ax = fig.gca(projection="3d")
@@ -136,7 +139,7 @@ def loadCalibData(datafile):
         X = line[0]
         Y = line[1]
         Z = line[2]
-        vector = np.matrix(((X),(Y),(Z)))
+        vector = np.matrix(((X),(Y),(Z),(1)))
         #print vector.T
         #vector = camera.dot(vector.T)
         vector = camera.T.dot(vector.T)

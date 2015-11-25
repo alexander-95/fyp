@@ -12,9 +12,6 @@ objp = np.zeros((WIDTH*HEIGHT,3), np.float32)
 objp[:,:2] = np.mgrid[0:HEIGHT,0:WIDTH].T.reshape(-1,2)
 
 cap = cv2.VideoCapture(0)
-avg = 0
-count = 0
-
 
 while (True):
         objpoints = [] # 3d point in real world space
@@ -40,8 +37,6 @@ while (True):
             ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1],None,None)
             #print 'matrix =', mtx
             print mtx.item(4)
-            avg+=mtx.item(4)
-            count+=1
             #h,  w = img.shape[:2]
             #newcameramtx, roi=cv2.getOptimalNewCameraMatrix(mtx,dist,(w,h),1,(w,h))
             #img = cv2.undistort(img, mtx, dist, None, newcameramtx)
@@ -49,7 +44,6 @@ while (True):
         cv2.imshow('img',img)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
-            print 'focal length =',avg/count
             break
 
 # release everything

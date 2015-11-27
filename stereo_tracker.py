@@ -34,6 +34,15 @@ while True:
     for c in centroidsR:
         cv2.circle(frameR,c,5,(255,0,0))
     
+    #project crosshairs onto image
+    frameL = cv2.cvtColor(frameL, cv2.COLOR_GRAY2BGR)
+    cv2.line(frameL, (0, 240), (640, 240), (0, 0, 255))
+    cv2.line(frameL, (320, 0), (320, 480), (0, 0, 255))
+    
+    frameR = cv2.cvtColor(frameR, cv2.COLOR_GRAY2BGR)
+    cv2.line(frameR, (0, 240), (640, 240), (0, 0, 255))
+    cv2.line(frameR, (320, 0), (320, 480), (0, 0, 255))
+    
     cv2.imshow('Left', frameL)
     cv2.imshow('Right', frameR)
 

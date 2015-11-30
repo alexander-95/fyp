@@ -62,7 +62,7 @@ def simulateCamera():
     #Camera = eulerToT((0, 0, 2, np.pi*1.0, np.pi*-0.4, np.pi*0.5))#yaw, roll, pitch
     Camera = eulerToT((0, 0, 2, np.pi*0.5, np.pi*-0.0, np.pi*0.0))#yaw, roll, pitch
     Camera =Camera.dot(eulerToT((0, 0, 0, np.pi*0.0, np.pi*0.0, np.pi*0.5)))#yaw, roll, pitch
-    
+
     p = np.matrix(((80, 1, 80, 1, 80, 1),
                     (-1, -1, 0, 0, 1, 1),
                     (0, 0, 0, 0, 0, 0),
@@ -80,14 +80,14 @@ def simulateCamera():
         y1 = float(p.item(1, i*2))/p.item(2, i*2)
         y2 = float(p.item(1, i*2+1))/p.item(2, i*2+1)
         #print x1,',',y1,x2,',',y2
-        plt.plot((x1, x2),(y1, y2), 'k-')# (p.item(2, i*2), p.item(2, i*2+1)), 'k-')
+        plt.plot((x1, x2),(y1, y2), 'k-')
 
     plt.show()
 
 def loadCalibData(datafile):
     data = np.loadtxt(datafile)
-    
-    a = np.matrix((data))
+
+    #a = np.matrix(data)
 
     first = True
     for line in data:
@@ -98,54 +98,66 @@ def loadCalibData(datafile):
         y = line[4]
 
         if first:
-            #A = np.matrix(((f*X, f*Y, f*Z, 0, 0, 0, x*X, x*Y, x*Z, f, 0, x),
-            #                (0, 0, 0, f*X, f*Y, f*Z, y*X, y*Y, y*Z, 0, f, y)))
             A = np.matrix(((X, Y, Z, 1, 0, 0, 0, 0, -x*X, -x*Y, -x*Z, -x),
                             (0, 0, 0, 0, X, Y, Z, 1, -y*X, -y*Y, -y*Z, -y)))
             first = False
         else:
-            #newrow = [f*X, f*Y, f*Z, 0, 0, 0, x*X, x*Y, x*Z, f, 0, x]
             newrow = [X, Y, Z, 1, 0, 0, 0, 0, -x*X, -x*Y, -x*Z, -x]
-            #print newrow
             A = np.vstack([A, newrow])
-            #newrow = [0, 0, 0, f*X, f*Y, f*Z, y*X, y*Y, y*Z, 0, f, y]
             newrow = [0, 0, 0, 0, X, Y, Z, 1, -y*X, -y*Y, -y*Z, -y]
-            #print newrow
             A = np.vstack([A, newrow])
-        
+    
     A = (A.T).dot(A)
-    eigenvalue, eigenvector = np.linalg.eig(A)
-    print 'eigenvalues = ',eigenvalue
-    print 'eigenvectors =', eigenvector
-    e = eigenvector[np.argmin(eigenvalue)]
-    e = eigenvector[10]
-    #print eigenvector
-    #print e
-    camera = np.matrix(((e.item(0), e.item(1), e.item(2),e.item(9)),
-                        (e.item(3), e.item(4), e.item(5),e.item(10)),
-                        (e.item(6), e.item(7), e.item(8),e.item(11)),
-                        (0,0,0,1)))
-    #print camera
 
+    #########################################################
+    #   Verified that all code up to this point is correct  #
+    #########################################################
+    np.set_printoptions(precision=3)
+    print 'A =',A
+    print 'shape(A) =',A.shape
+    eigenvalue, eigenvector = np.linalg.eig(A)
+    print 'eigenvalues =', eigenvalue
+    print 'eigenvectors =', eigenvector
+    #print 'eigenvectors =', eigenvector
+    print 'shape of eigenvector =',eigenvector.shape
+    e = eigenvector[np.argmin(eigenvalue)]
+    e = eigenvector[:,11]
+    print 'min eigenvector =', np.argmin(eigenvalue)
+    print 'min eigenvector =',e
+    
+    #print eigenvector
+    print e
+
+    camera = e.reshape((3,4))
+    #camera = np.vstack([camera, [0,0,0,1]])#make camera homogeneous
+    print camera
+    
+    #3D plot
     fig = plt.figure()
     ax = fig.gca(projection="3d")
     ax.plot(data[:,0], data[:,1], data[:,2],'k.')
-
+    
+    #2D plot
     fig = plt.figure()
     ax = fig.gca()
     ax.plot(data[:,3], data[:,4],'r.')
-    
+
     for line in data:
         X = line[0]
         Y = line[1]
         Z = line[2]
-        vector = np.matrix(((X),(Y),(Z),(1)))
-        #print vector.T
-        #vector = camera.dot(vector.T)
-        vector = camera.T.dot(vector.T)
-        #print vector
-        #print vector.item(0), vector.item(1), vector.item(2)
-        ax.plot(vector.item(0)/vector.item(2),vector.item(1)/vector.item(2), 'g.')
+        #print 'line =',line
+        point = np.matrix(((X,Y,Z,1))).T
+        #print camera
+        #print '3D point =',point.T
+
+        point = camera.dot(point)
+        #point = point.T.dot(camera)
+        #print '2D point =',point.T
+        #print point.item(0)/point.item(2),point.item(1)/point.item(2)
+        #print
+
+        ax.plot(point.item(0)/point.item(2),point.item(1)/point.item(2), 'g.')
     plt.show()
 
 loadCalibData('data.txt')
@@ -159,4 +171,3 @@ loadCalibData('data.txt')
 #R = expToR((90, 0, 0))
 
 #simulateCamera()
-

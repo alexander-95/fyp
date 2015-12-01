@@ -106,27 +106,27 @@ def loadCalibData(datafile):
             A = np.vstack([A, newrow])
             newrow = [0, 0, 0, 0, X, Y, Z, 1, -y*X, -y*Y, -y*Z, -y]
             A = np.vstack([A, newrow])
-    
+    np.set_printoptions(threshold='nan')
     A = (A.T).dot(A)
 
     #########################################################
     #   Verified that all code up to this point is correct  #
     #########################################################
     np.set_printoptions(precision=3)
-    print 'A =',A
-    print 'shape(A) =',A.shape
+    #print 'A =',A
+    #print 'shape(A) =',A.shape
     eigenvalue, eigenvector = np.linalg.eig(A)
-    print 'eigenvalues =', eigenvalue
-    print 'eigenvectors =', eigenvector
+    #print 'eigenvalues =', eigenvalue
     #print 'eigenvectors =', eigenvector
-    print 'shape of eigenvector =',eigenvector.shape
+    #print 'eigenvectors =', eigenvector
+    #print 'shape of eigenvector =',eigenvector.shape
     e = eigenvector[np.argmin(eigenvalue)]
     e = eigenvector[:,11]
-    print 'min eigenvector =', np.argmin(eigenvalue)
-    print 'min eigenvector =',e
+    #print 'min eigenvector =', np.argmin(eigenvalue)
+    #print 'min eigenvector =',e
     
     #print eigenvector
-    print e
+    #print e
 
     camera = e.reshape((3,4))
     #camera = np.vstack([camera, [0,0,0,1]])#make camera homogeneous
@@ -153,7 +153,7 @@ def loadCalibData(datafile):
 
         point = camera.dot(point)
         #point = point.T.dot(camera)
-        #print '2D point =',point.T
+        print '2D point =',point.T
         #print point.item(0)/point.item(2),point.item(1)/point.item(2)
         #print
 

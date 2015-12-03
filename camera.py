@@ -1,6 +1,7 @@
 import cv2
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture()
+cap.open('http://192.168.1.107:8080/video?.mjpeg')
 
 #set a new resolution
 cap.set(3,640)
@@ -15,19 +16,10 @@ cap.set(10,0.5)
 #bump up the contrast
 cap.set(11,0.5)
 
-ret, oldframe = cap.read()
-oldframe = cv2.cvtColor(oldframe, cv2.COLOR_BGR2GRAY)
-
 while(True):
     ret, frame = cap.read()
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-    diff = cv2.absdiff(frame, oldframe)
-    cv2.threshold(diff, 31, 255, cv2.THRESH_BINARY, diff)
-    cv2.imshow('frame', diff)
     
-    oldframe = frame
-
+    cv2.imshow('frame', frame)
     #if the 'c' key is pressed
     if cv2.waitKey(1) & 0xFF == ord('c'):
         cv2.imwrite('image.png', diff)

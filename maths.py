@@ -63,21 +63,21 @@ def mathExample():
     y4 = 48.0
 
     #disparities in x axis
-    d1 = delta(x1, 320)
-    d2 = delta(x2, 320)
-    d3 = delta(x3, 320)
-    d4 = delta(x4, 320)
+    d1 = x1 - 320
+    d2 = x2 - 320
+    d3 = x3 - 320
+    d4 = x4 - 320
 
     #disparities in y axis
-    dz1 = delta(y1, 240)
-    dz2 = delta(y2, 240)
-    dz3 = delta(y3, 240)
-    dz4 = delta(y4, 240)
+    dz1 = y1 - 240
+    dz2 = y2 - 240
+    dz3 = y3 - 240
+    dz4 = y4 - 240
 
     print dz1, dz2,dz3,dz4
 
     b = px(80.0) #baseline
-    f = px(4.0)  #focal length
+    f = float(px(4.0))  #focal length
 
     #some extra variables
     z1 = x1*(dz1/f)
@@ -90,11 +90,11 @@ def mathExample():
 
     num = (A*b*(d2-d4))+(C*b*(d3-d1))
     denom = (C*(delta(t2, t1)*(d3-d1)-delta(t3, t1)*(d2-d1))) + (A*(delta(t4, t3)*(d2-d4)-delta(t4, t2)*(d3-d4)))
-    Vy = float(num/denom)
+    Vy = float(num)/denom
 
     num = (f*b*(d2-d4)) - (delta(t4, t3)*f*Vy*(d2-d4)) + (delta(t4, t2)*f*Vy*(d3-d4))
     denom = delta(t4, t2)*d2*(d3-d4) - delta(t4, t3)*d3*(d2-d4)
-    Vx = float(num/denom)
+    Vx = float(num)/denom
 
     #position at time 1
     X1 = (((-1)*b*f)/(d2-d1)) + (delta(t2, t1)*(f*Vy - Vx*d2))/(d2-d1)

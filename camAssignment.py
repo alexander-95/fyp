@@ -87,8 +87,6 @@ def simulateCamera():
 def loadCalibData(datafile):
     data = np.loadtxt(datafile)
 
-    #a = np.matrix(data)
-
     first = True
     for line in data:
         X = line[0]
@@ -96,7 +94,9 @@ def loadCalibData(datafile):
         Z = line[2]
         x = line[3]
         y = line[4]
+        
 
+        #a[::2] = [0,0,0,1] set every even row
         if first:
             A = np.matrix(((X, Y, Z, 1, 0, 0, 0, 0, -x*X, -x*Y, -x*Z, -x),
                             (0, 0, 0, 0, X, Y, Z, 1, -y*X, -y*Y, -y*Z, -y)))
@@ -109,28 +109,11 @@ def loadCalibData(datafile):
     np.set_printoptions(threshold='nan')
     A = (A.T).dot(A)
 
-    #########################################################
-    #   Verified that all code up to this point is correct  #
-    #########################################################
     np.set_printoptions(precision=3)
-    #print 'A =',A
-    #print 'shape(A) =',A.shape
     eigenvalue, eigenvector = np.linalg.eig(A)
-    #print 'eigenvalues =', eigenvalue
-    #print 'eigenvectors =', eigenvector
-    #print 'eigenvectors =', eigenvector
-    #print 'shape of eigenvector =',eigenvector.shape
-    e = eigenvector[np.argmin(eigenvalue)]
     e = eigenvector[:,11]
-    #print 'min eigenvector =', np.argmin(eigenvalue)
-    #print 'min eigenvector =',e
-    
-    #print eigenvector
-    #print e
 
     camera = e.reshape((3,4))
-    #camera = np.vstack([camera, [0,0,0,1]])#make camera homogeneous
-    print camera
     
     #3D plot
     fig = plt.figure()
@@ -146,21 +129,14 @@ def loadCalibData(datafile):
         X = line[0]
         Y = line[1]
         Z = line[2]
-        #print 'line =',line
         point = np.matrix(((X,Y,Z,1))).T
-        #print camera
-        #print '3D point =',point.T
 
         point = camera.dot(point)
-        #point = point.T.dot(camera)
-        print '2D point =',point.T
-        #print point.item(0)/point.item(2),point.item(1)/point.item(2)
-        #print
 
         ax.plot(point.item(0)/point.item(2),point.item(1)/point.item(2), 'g.')
     plt.show()
 
-loadCalibData('data.txt')
+#loadCalibData('data.txt')
 
 #R = eulerToR((90, 0, 0))
 #print R
@@ -170,4 +146,4 @@ loadCalibData('data.txt')
 #print ''
 #R = expToR((90, 0, 0))
 
-#simulateCamera()
+simulateCamera()

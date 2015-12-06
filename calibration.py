@@ -12,13 +12,14 @@ objp = np.zeros((WIDTH*HEIGHT,3), np.float32)
 objp[:,:2] = np.mgrid[0:HEIGHT,0:WIDTH].T.reshape(-1,2)
 
 cap = cv2.VideoCapture()
-cap.open('http://192.168.0.5:8080/video?.mjpeg')
+#cap.open('http://192.168.0.5:8080/video?.mjpeg')
 
-axis = np.float32([[3,0,0], [0,3,0], [0,0,-3]]).reshape(-1,3)
+#axis = np.float32([[3,0,0], [0,3,0], [0,0,-3]]).reshape(-1,3)
 
 camera = []
 
-while (True):
+#while (True):
+while (False):
     objpoints = [] # 3d point in real world space
     imgpoints = [] # 2d points in image plane.
 
@@ -44,16 +45,43 @@ while (True):
         ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1],None,None)
         if cv2.waitKey(1) & 0xFF == ord(' '):
             print mtx
+            #print corners
             camera.append(mtx)
+            cv2.imwrite('img.png', gray)
     cv2.imshow('img',img)
     #print 'b',x,y,w,h
     if cv2.waitKey(1) & 0xFF == ord('q'):
         num = float(len(camera))
         camera = sum(camera)
-        camera = float(camera/num)
+        camera = camera/num
         print "matrix estimation:",camera
         print mtx
         break
+
+#get the corners of the chessboard image
+img = cv2.imread('pattern.png')
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+ret, corners = cv2.findChessboardCorners(gray, (HEIGHT, WIDTH), None)
+if ret == True:
+    print 'found corners in image'
+    print corners
+    cv2.imshow('checkerboard', img)
+
+img = cv2.imread('img.png')
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+ret, corners2 = cv2.findChessboardCorners(gray, (HEIGHT, WIDTH), None)
+if ret == True:
+    print 'found corners in photo'
+    print corners2
+    cv2.imshow('image', img)
+data = np.concatenate((np.matrix(corners), np.matrix(corners2)), axis=1)
+print 'data =',data
+print np.shape(data)
+A = np.empty([54*2,9])
+A[::2] = np.concatenate((-data[:,0:2],np.matrix([[-1,0,0,0]]*54),np.multiply(np.matrix(data[::,2:3]),np.matrix(data[::,0:2])),np.matrix(-data[::,2:3])),axis=1)
+A[1::2] = np.concatenate((np.matrix([[0,0,0]]*54),-data[:,0:2],np.matrix([[-1]]*54),np.multiply(np.matrix(-data[::,3:4]),np.matrix(data[::,0:2])), np.matrix(-data[::,3:4])),axis=1)
+            
+print A
 
 # release everything
 cap.release()

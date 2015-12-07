@@ -74,14 +74,36 @@ if ret == True:
     print 'found corners in photo'
     print corners2
     cv2.imshow('image', img)
-data = np.concatenate((np.matrix(corners), np.matrix(corners2)), axis=1)
-print 'data =',data
-print np.shape(data)
-A = np.empty([54*2,9])
-A[::2] = np.concatenate((-data[:,0:2],np.matrix([[-1,0,0,0]]*54),np.multiply(np.matrix(data[::,2:3]),np.matrix(data[::,0:2])),np.matrix(-data[::,2:3])),axis=1)
-A[1::2] = np.concatenate((np.matrix([[0,0,0]]*54),-data[:,0:2],np.matrix([[-1]]*54),np.multiply(np.matrix(-data[::,3:4]),np.matrix(data[::,0:2])), np.matrix(-data[::,3:4])),axis=1)
+
+H,matches = cv2.findHomography(corners,corners2)
+img3 = cv2.imread('img3.png')
+warp = cv2.warpPerspective(img3, H, (640, 480))
+cv2.imwrite('img2.png',warp)
+
+
+#data = np.concatenate((np.matrix(corners), np.matrix(corners2)), axis=1)
+
+#print 'data =',data
+#print np.shape(data)
+#A = np.empty([54*2,9])
+#A[::2] = np.concatenate((-data[:,0:2],np.matrix([[-1,0,0,0]]*54),np.multiply(np.matrix(data[::,2:3]),np.matrix(data[::,0:2])),np.matrix(-data[::,2:3])),axis=1)
+#A[1::2] = np.concatenate((np.matrix([[0,0,0]]*54),-data[:,0:2],np.matrix([[-1]]*54),np.multiply(np.matrix(-data[::,3:4]),np.matrix(data[::,0:2])), np.matrix(-data[::,3:4])),axis=1)
             
-print A
+#print A
+#A = A.T.dot(A)
+#eigenvalue, eigenvector = np.linalg.eig(A)
+#e = eigenvector[:,8]
+#e = e.reshape(3,3)
+#print e
+print 'img=',img
+print np.shape(img)
+
+#img2 = np.zeros((480, 640, 3))
+#img3 = cv2.imread('img3.png')
+
+#cv2.imwrite('img2.png',img2)
+
+
 
 # release everything
 cap.release()

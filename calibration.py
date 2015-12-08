@@ -11,7 +11,7 @@ HEIGHT = 9
 objp = np.zeros((WIDTH*HEIGHT,3), np.float32)
 objp[:,:2] = np.mgrid[0:HEIGHT,0:WIDTH].T.reshape(-1,2)
 
-cap = cv2.VideoCapture()
+cap = cv2.VideoCapture(0)
 #cap.open('http://192.168.0.5:8080/video?.mjpeg')
 
 #axis = np.float32([[3,0,0], [0,3,0], [0,0,-3]]).reshape(-1,3)
@@ -62,48 +62,44 @@ while (False):
 img = cv2.imread('pattern.png')
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 ret, corners = cv2.findChessboardCorners(gray, (HEIGHT, WIDTH), None)
-if ret == True:
+if ret == False:
     print 'found corners in image'
     print corners
     cv2.imshow('checkerboard', img)
 
-img = cv2.imread('img.png')
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-ret, corners2 = cv2.findChessboardCorners(gray, (HEIGHT, WIDTH), None)
-if ret == True:
-    print 'found corners in photo'
-    print corners2
-    cv2.imshow('image', img)
+#overlay an image on the checkerboard
+while True:
+    #img = cv2.imread('img.png')
+    ret, img = cap.read()
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    ret, corners2 = cv2.findChessboardCorners(gray, (HEIGHT, WIDTH), None)
+    if ret == True:
+        #print 'found corners in photo'
+        #print corners2
+        #cv2.imshow('image', img)#color camera feed
 
-H,matches = cv2.findHomography(corners,corners2)
-img3 = cv2.imread('img3.png')
-warp = cv2.warpPerspective(img3, H, (640, 480))
-cv2.imwrite('img2.png',warp)
+        H,matches = cv2.findHomography(corners,corners2)
+        img3 = cv2.imread('img3.png')
+        warp = cv2.warpPerspective(img3, H, (640, 480))
+        
+        warpgray = cv2.cvtColor(warp, cv2.COLOR_BGR2GRAY)
+        ret, mask = cv2.threshold(warpgray, 1, 255, cv2.THRESH_BINARY)
+        mask_inv = cv2.bitwise_not(mask)
+        #cv2.imshow('mask inv', mask_inv)
+        
+        img[:,:,0] = cv2.bitwise_and(img[:,:,0],mask_inv)#blue
+        img[:,:,1] = cv2.bitwise_and(img[:,:,1],mask_inv)#green
+        img[:,:,2] = cv2.bitwise_and(img[:,:,2],mask_inv)#red
+        img = cv2.add(img, warp)
+        cv2.imshow('image', img)#color camera feed
 
+        gray = cv2.bitwise_and(gray,mask_inv)
+        #cv2.imshow('grayscale', gray)#grayscale camera feed
 
-#data = np.concatenate((np.matrix(corners), np.matrix(corners2)), axis=1)
-
-#print 'data =',data
-#print np.shape(data)
-#A = np.empty([54*2,9])
-#A[::2] = np.concatenate((-data[:,0:2],np.matrix([[-1,0,0,0]]*54),np.multiply(np.matrix(data[::,2:3]),np.matrix(data[::,0:2])),np.matrix(-data[::,2:3])),axis=1)
-#A[1::2] = np.concatenate((np.matrix([[0,0,0]]*54),-data[:,0:2],np.matrix([[-1]]*54),np.multiply(np.matrix(-data[::,3:4]),np.matrix(data[::,0:2])), np.matrix(-data[::,3:4])),axis=1)
-            
-#print A
-#A = A.T.dot(A)
-#eigenvalue, eigenvector = np.linalg.eig(A)
-#e = eigenvector[:,8]
-#e = e.reshape(3,3)
-#print e
-print 'img=',img
-print np.shape(img)
-
-#img2 = np.zeros((480, 640, 3))
-#img3 = cv2.imread('img3.png')
-
-#cv2.imwrite('img2.png',img2)
-
-
+        #cv2.imshow('frame', warp)#final product
+    #cv2.imwrite('img2.png',warp)
+    if cv2.waitKey(1) & 0xFF ==ord('q'):
+        break
 
 # release everything
 cap.release()

@@ -84,7 +84,7 @@ def simulateCamera():
 
     plt.show()
 
-def loadCalibData(datafile):
+def calibrateCamera3D(datafile):
     data = np.loadtxt(datafile)
 
     #new hip way of creating matrix
@@ -97,11 +97,10 @@ def loadCalibData(datafile):
     eigenvalue, eigenvector = np.linalg.eig(A)
     e = eigenvector[:,11]
     camera = e.reshape((3,4))
+    return camera
 
-    #3D plot
-    fig = plt.figure()
-    ax = fig.gca(projection="3d")
-    ax.plot(data[:,0], data[:,1], data[:,2],'k.')
+def visualiseCameraCalibration3D(datafile, P):
+    data = np.loadtxt(datafile)
 
     #2D plot
     fig = plt.figure()
@@ -109,11 +108,16 @@ def loadCalibData(datafile):
     ax.plot(data[:,3], data[:,4],'r.')
     
     points = np.concatenate((data[::,0:3],np.matrix([[1]]*491)),axis=1).T
-    points = camera.dot(points)
+    points = P.dot(points)
+    
     ax.plot(np.divide(points[0:1,:],points[2:3,:]),np.divide(points[1:2,:],points[2:3,:]), 'g.')
     plt.show()
 
-loadCalibData('data.txt')
+
+#def evaluateCameraCalibration3D(datafile, P):
+
+P = calibrateCamera3D('data.txt')
+visualiseCameraCalibration3D('data.txt', P)
 
 #R = eulerToR((90, 0, 0))
 #print R

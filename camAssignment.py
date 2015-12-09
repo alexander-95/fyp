@@ -88,7 +88,6 @@ def calibrateCamera3D(datafile):
     data = np.loadtxt(datafile)
 
     #new hip way of creating matrix
-    #                         X,Y,Z                  1,0,0,0,0                               -x
     A = np.empty([491*2,12])
     A[::2] = np.concatenate((data[:,0:3],np.matrix([[1,0,0,0,0]]*491),np.multiply(np.matrix(-data[::,3:4]),np.matrix(data[::,0:3])),np.matrix(-data[::,3:4])),axis=1)
     A[1::2] = np.concatenate((np.matrix([[0,0,0,0]]*491),data[:,0:3],np.matrix([[1]]*491),np.multiply(np.matrix(-data[::,4:5]),np.matrix(data[::,0:3])), np.matrix(-data[::,4:5])),axis=1)
@@ -109,22 +108,30 @@ def visualiseCameraCalibration3D(datafile, P):
     
     points = np.concatenate((data[::,0:3],np.matrix([[1]]*491)),axis=1).T
     points = P.dot(points)
-    
-    ax.plot(np.divide(points[0:1,:],points[2:3,:]),np.divide(points[1:2,:],points[2:3,:]), 'g.')
+    points = np.concatenate((np.divide(points[0:1,:],points[2:3,:]),np.divide(points[1:2,:],points[2:3,:])),axis=0)
+    ax.plot(points[0,:], points[1,:], 'b.')
+    #ax.plot(np.divide(points[0:1,:],points[2:3,:]),np.divide(points[1:2,:],points[2:3,:]), 'g.')
     plt.show()
 
+def evaluateCameraCalibration3D(datafile, P):
+    data = np.loadtxt(datafile)
+    points = np.concatenate((data[::,0:3],np.matrix([[1]]*491)),axis=1).T
+    points = P.dot(points)
+    points = np.concatenate((np.divide(points[0:1,:],points[2:3,:]),np.divide(points[1:2,:],points[2:3,:])),axis=0)
+    diff = np.subtract(data[:,3:5], points.T) 
+    square = np.multiply(diff, diff)
+    dist = np.add(square[:,0], square[:,1])
+    dist = np.sqrt(dist)
+    mean = np.mean(dist)
+    variance = np.var(dist)
+    maximum = np.amax(dist)
+    minimum = np.amin(dist)
+    print 'mean =',mean
+    print 'variance =',variance
+    print 'max =',maximum
+    print 'min =',minimum
 
-#def evaluateCameraCalibration3D(datafile, P):
-
+simulateCamera()
 P = calibrateCamera3D('data.txt')
 visualiseCameraCalibration3D('data.txt', P)
-
-#R = eulerToR((90, 0, 0))
-#print R
-#print ''
-#T = eulerToT((1, 2, 3, 90, 0, 0))
-#print T
-#print ''
-#R = expToR((90, 0, 0))
-
-#simulateCamera()
+evaluateCameraCalibration3D('data.txt', P)

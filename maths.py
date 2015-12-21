@@ -27,6 +27,7 @@ def mm(x):
 #def delta(x, y):
 #    return float(abs(x-y))
 
+#gets the location using synchronous stereo vision
 def getLocation(l, r, f, b):
     x1 = l[0] #object as seen from the left camera
     y1 = l[1]
@@ -86,12 +87,12 @@ def mathExample():
     Vz = (z2 - z1)/(t2 - t1)
 
     A = ((t2 - t1)*d2*(d3-d1)) - ((t3 - t1)*d3*(d2-d1))
-    C = ((t4 - t2)*d2*(d3-d4)) - ((t4 - t3)*d3*(d2-d4))
+    C = ((t4 - t2)*d2*(d2-d4)) - ((t4 - t3)*d3*(d3-d4))
 
     num = (A*b*(d2-d4))+(C*b*(d3-d1))
     denom = (C*((t2 - t1)*(d3-d1)-(t3 - t1)*(d2-d1))) + (A*((t4 - t3)*(d2-d4)-(t4 - t2)*(d3-d4)))
     
-    print 'num =',num
+    print 'num =', num
     print 'denom =', denom
     Vy = float(num)/denom
 
@@ -103,13 +104,13 @@ def mathExample():
 
     #position at time 1
     X1 = (((-1)*b*f)/(d2-d1)) + ((t2 - t1)*(f*Vy - Vx*d2))/(d2-d1)
-    Y1 = ((d1*(t2 - t1)*Vy - d1*b)/(d2-d1)) - ((d1*d2*Vx*(t2 - t1))/(f*(d2-d1)))
-    Z1 = X1*(dz1/f)
+    Y1 = ( ((d1*(t2 - t1)*Vy) - d1*b)/(d2-d1)) - ((d1*d2*Vx*(t2 - t1))/(f*(d2-d1)))
+    Z1 = x1*(dz1/f)
 
     #position at time 4
     X4 = (f*b/(d3-d4)) + (((t4 - t3)*(Vx*d3 - Vy*f))/(d3-d4))
     Y4 = (((b*d3)-(d4*(t4 - t3)*Vy))/(d3-d4)) + (((t4 - t3)*Vx*d4*d3)/(f*(d3-d4)))
-    Z4 = X4*(dz4/f)
+    Z4 = x4*(dz4/f)
 
     xdiff = X4 - X1
     ydiff = Y4 - Y1

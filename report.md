@@ -14,7 +14,7 @@ motivation, why people should care, what are you trying to achieve:
 In a typical stereo vision setup, the assumption is made that each camera is taking photos at the same time. This cannot be the case in a single threaded application. My project avoids this assumption by taking photos asynchronously(at different times).
 
 technical description of problem:
-In typical synchronous stereo vision, 2 photographs of an object can be taken at the same time. The difference can be used to calculate depth information. Another set of 2 photos can be taken to get the location at a second point in time and then work out the velocity of the object. The problem I am trying to solve is taking 4 photos at different times and calculate velocity in one go. The photos must be taken as fast as possible to make sure the entity does not change direction. 
+In typical synchronous stereo vision, 2 photographs of an object can be taken at the same time. The difference can be used to calculate depth information. Another set of 2 photos can be taken to get the location at a second point in time and then work out the velocity of the object. The problem I am trying to solve is taking 4 photos at different times and calculate velocity in one go. The photos must be taken as fast as possible to make sure the entity does not change direction.
 summary of how project was approached:
 
 how to evaluate work
@@ -27,7 +27,7 @@ describe achievements
 
 - lack of research in asychronous stereo vision
 
-- docs.opencv.org 
+- docs.opencv.org
 
 ##4.The Problem
 - describe synchronous stereo vision
@@ -41,6 +41,10 @@ In traditional stereo vision, 2 cameras, A and B, are set up front and parallel.
 Once the cameras are set up as described above, A photo is taken with each camera at the same time. Next the object must be located in both images. X-Y coordinates in pixels are used to describe the location of the object in the image. The interesting measurement is the Z coordinate, or depth.
 Z=f*b/d
 
+\begin{equation}
+  a^2+b^2=c^2
+\end{equation}
+
 ##5.The Solution
 
 ##6.Evaluation
@@ -50,4 +54,3 @@ Z=f*b/d
 ##8.References
 
 ##9.Appendices
-

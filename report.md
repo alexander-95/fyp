@@ -34,16 +34,14 @@ describe achievements
 - describe assumptions made with stereo vision
 - describe front and parallel cameras
 - finding the same object in both cameras
--calculating the intrinsic parameters
+- calculating the intrinsic parameters
 
 In traditional stereo vision, 2 cameras, A and B, are set up front and parallel. The distance between the cameras is measured and called the baseline, b. Some intrinsic parameters are also required. 2 identical cameras should be used in any stereo vision technique to avoid complications in further calculations. The focal length and and size of the imaging sensor for the cameras are required. Knowing the size and resolution of the image plane allows us to translate between pixels and millimeters for the results.
 
 Once the cameras are set up as described above, A photo is taken with each camera at the same time. Next the object must be located in both images. X-Y coordinates in pixels are used to describe the location of the object in the image. The interesting measurement is the Z coordinate, or depth.
+
 Z=f*b/d
 
-\begin{equation}
-  a^2+b^2=c^2
-\end{equation}
 
 ##5.The Solution
 

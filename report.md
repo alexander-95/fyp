@@ -42,6 +42,16 @@ Once the cameras are set up as described above, A photo is taken with each camer
 
 Z=f*b/d
 
+In a typical synchronous stereo vision technique, the assumption is made that the cameras can take pictures at the same time. This is not true in a single threaded application where only one camera can be controlled at a time. This can be demonstrated with pseudo code:
+
+frame1 = capL.read()
+frame2 = capR.read()
+
+There will always be a time delay between each line of code being executed.
+
+Most stereo vision techniques make the assumption that the cameras are pointing front and parallel. The alignment of the cameras is a big factor in the accuracy of the photos being taken, especially at long distances. Having the cameras perfectly aligned is an important problem to solve.
+
+
 
 ##5.The Solution
 

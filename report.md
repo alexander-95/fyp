@@ -25,12 +25,16 @@ describe achievements
 - xbox 360 kinect sensor
 - xbox one kinect sensor
 
-lack of research in asychronous stereo vision
+- lack of research in asychronous stereo vision
 
 - docs.opencv.org
 - 
 
 ##4.The Problem
+- describe synchronous stereo vision
+- describe assumptions made with stereo vision
+- describe front and parallel cameras
+- finding the same object in both cameras
 
 ##5.The Solution
 

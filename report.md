@@ -59,8 +59,11 @@ ANALYTICAL WORK
 Since this project is a continuation of a previous project, I will be reusing mathematical formulae that have been used by Colm O Connell. The method I will be using, takes 4 photos at different times, t1, t2, t3 and t4. The location of the object can be calculated at t1 and t4:
 
 position at time 1
+
 X1 = (((-1)*b*f)/(d2-d1)) + ((t2 - t1)*(f*Vy - Vx*d2))/(d2-d1)
+
 Y1 = ( ((d1*(t2 - t1)*Vy) - d1*b)/(d2-d1)) - ((d1*d2*Vx*(t2 - t1))/(f*(d2-d1)))
+
 Z1 = X1*(dz1/f)
 
 position at time 4
@@ -88,14 +91,13 @@ num = (f*b*(d2-d4)) - ((t4 - t3)*f*Vy*(d2-d4)) + ((t4 - t2)*f*Vy*(d3-d4))
 denom = (t4 - t2)*d2*(d3-d4) - (t4 - t3)*d3*(d2-d4)
 Vx = num/denom
 
-A =
-C =
-
-
+A = ((t2 - t1)*d2*(d3-d1)) - ((t3 - t1)*d3*(d2-d1))
+C = ((t4 - t2)*d2*(d2-d4)) - ((t4 - t3)*d3*(d3-d4))
 
 
 DIAGRAM AND EXPLANATION OF CAMERA SETUP
 HIGH LEVEL DESIGN
+
 LOW LEVEL DESIGN
 IMPLEMENTATION
 

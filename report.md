@@ -59,11 +59,8 @@ ANALYTICAL WORK
 Since this project is a continuation of a previous project, I will be reusing mathematical formulae that have been used by Colm O Connell. The method I will be using, takes 4 photos at different times, t1, t2, t3 and t4. The location of the object can be calculated at t1 and t4:
 
 position at time 1
-
 X1 = (((-1)*b*f)/(d2-d1)) + ((t2 - t1)*(f*Vy - Vx*d2))/(d2-d1)
-
 Y1 = ( ((d1*(t2 - t1)*Vy) - d1*b)/(d2-d1)) - ((d1*d2*Vx*(t2 - t1))/(f*(d2-d1)))
-
 Z1 = X1*(dz1/f)
 
 position at time 4
@@ -97,8 +94,12 @@ C = ((t4 - t2)*d2*(d2-d4)) - ((t4 - t3)*d3*(d3-d4))
 
 DIAGRAM AND EXPLANATION OF CAMERA SETUP
 HIGH LEVEL DESIGN
+To make the images easier to analyse, I will be taking photos of a dark target against a light background, or vice versa.
+The photos will be converted to greyscale and thresholded. The time at which the photos were taken will be recorded and the location of the object in the image using blob detection. Noise reduction may be necessary in places to smooth out the image. Most of the image manipulation will be done using python opencv.
 
 LOW LEVEL DESIGN
+
+
 IMPLEMENTATION
 
 ##6.Evaluation

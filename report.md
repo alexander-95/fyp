@@ -54,8 +54,50 @@ Most stereo vision techniques make the assumption that the cameras are pointing 
 In a scene that has many features, it can be hard to locate the object of interest. In order to track an object, the same feature point must be recognised from both cameras. There is also the problem of getting multiple matches in feature recognition. The next decision would be what entity to track.
 
 
-
 ##5.The Solution
+ANALYTICAL WORK
+Since this project is a continuation of a previous project, I will be reusing mathematical formulae that have been used by Colm O Connell. The method I will be using, takes 4 photos at different times, t1, t2, t3 and t4. The location of the object can be calculated at t1 and t4:
+
+position at time 1
+X1 = (((-1)*b*f)/(d2-d1)) + ((t2 - t1)*(f*Vy - Vx*d2))/(d2-d1)
+Y1 = ( ((d1*(t2 - t1)*Vy) - d1*b)/(d2-d1)) - ((d1*d2*Vx*(t2 - t1))/(f*(d2-d1)))
+Z1 = X1*(dz1/f)
+
+position at time 4
+X4 = (f*b/(d3-d4)) + (((t4 - t3)*(Vx*d3 - Vy*f))/(d3-d4))
+Y4 = (((b*d3)-(d4*(t4 - t3)*Vy))/(d3-d4)) + (((t4 - t3)*Vx*d4*d3)/(f*(d3-d4)))
+Z4 = X4*(dz4/f)
+
+b = baseline
+f = focal length
+d1, d2, d3, d4 = disparity in x direction in photo taken at t1, t2, t3 and t4 respectively.
+dz1, dz2, dz3, dz4 = disparity in y direction in photo taken at t1, t2, t3, t4 respectively.
+t1, t2, t3, t4 = time at which img1, img2, img3 and img4 were taken at respectively.
+(x1, y1), (x1, y1), (x1, y1), (x1, y1) = pixel coordinates of point of interest in photo taken at t1, t2, t3 and t4 respectively.
+
+some extra variables
+z1 = x1*(dz1/f)
+z2 = x2*(dz2/f)  
+Vz = (z2 - z1)/(t2 - t1)
+
+num = (A*b*(d2-d4))+(C*b*(d3-d1))
+denom = (C*((t2 - t1)*(d3-d1)-(t3 - t1)*(d2-d1))) + (A*((t4 - t3)*(d2-d4)-(t4 - t2)*(d3-d4)))
+Vy = num/denom
+
+num = (f*b*(d2-d4)) - ((t4 - t3)*f*Vy*(d2-d4)) + ((t4 - t2)*f*Vy*(d3-d4))
+denom = (t4 - t2)*d2*(d3-d4) - (t4 - t3)*d3*(d2-d4)
+Vx = num/denom
+
+A =
+C =
+
+
+
+
+DIAGRAM AND EXPLANATION OF CAMERA SETUP
+HIGH LEVEL DESIGN
+LOW LEVEL DESIGN
+IMPLEMENTATION
 
 ##6.Evaluation
 

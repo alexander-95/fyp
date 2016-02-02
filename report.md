@@ -36,37 +36,37 @@ describe achievements
 - finding the same object in both cameras
 - calculating the intrinsic parameters
 
-In traditional stereo vision, 2 cameras, A and B, are set up front and parallel. The distance between the cameras is measured and called the baseline, b. Some intrinsic parameters are also required. 2 identical cameras should be used in any stereo vision technique to avoid complications in further calculations. The focal length and and size of the imaging sensor for the cameras are required. Knowing the size and resolution of the image plane allows us to translate between pixels and millimeters for the results.
+In traditional stereo vision, 2 cameras, A and B, are set up front and parallel. The distance between the cameras is measured and called the baseline, b. Some intrinsic parameters are also required. 2 identical cameras should be used in any stereo vision technique to avoid complications in further calculations. The focal length and and size of the imaging sensor for the cameras are required. Knowing the size and resolution of the image plane allows us to translate between pixels and millimeters for the results.  
 
-Once the cameras are set up as described above, A photo is taken with each camera at the same time. Next the object must be located in both images. X-Y coordinates in pixels are used to describe the location of the object in the image. The interesting measurement is the Z coordinate, or depth.
+Once the cameras are set up as described above, A photo is taken with each camera at the same time. Next the object must be located in both images. X-Y coordinates in pixels are used to describe the location of the object in the image. The interesting measurement is the Z coordinate, or depth.  
 
-Z=f*b/d
+Z=f*b/d  
 
-In a typical synchronous stereo vision technique, the assumption is made that the cameras can take pictures at the same time. This is not true in a single threaded application where only one camera can be controlled at a time. This can be demonstrated with pseudo code:
+In a typical synchronous stereo vision technique, the assumption is made that the cameras can take pictures at the same time. This is not true in a single threaded application where only one camera can be controlled at a time. This can be demonstrated with pseudo code:  
 
-frame1 = capL.read()
-frame2 = capR.read()
+frame1 = capL.read()  
+frame2 = capR.read()  
 
-There will always be a time delay between each line of code being executed.
+There will always be a time delay between each line of code being executed.  
 
-Most stereo vision techniques make the assumption that the cameras are pointing front and parallel. The alignment of the cameras is a big factor in the accuracy of the photos being taken, especially at long distances. Having the cameras perfectly aligned is an important problem to solve.
+Most stereo vision techniques make the assumption that the cameras are pointing front and parallel. The alignment of the cameras is a big factor in the accuracy of the photos being taken, especially at long distances. Having the cameras perfectly aligned is an important problem to solve.  
 
-In a scene that has many features, it can be hard to locate the object of interest. In order to track an object, the same feature point must be recognised from both cameras. There is also the problem of getting multiple matches in feature recognition. The next decision would be what entity to track.
+In a scene that has many features, it can be hard to locate the object of interest. In order to track an object, the same feature point must be recognised from both cameras. There is also the problem of getting multiple matches in feature recognition. The next decision would be what entity to track.  
 
 
 ##5.The Solution
 ANALYTICAL WORK
-Since this project is a continuation of a previous project, I will be reusing mathematical formulae that have been used by Colm O Connell. The method I will be using, takes 4 photos at different times, t1, t2, t3 and t4. The location of the object can be calculated at t1 and t4:
+Since this project is a continuation of a previous project, I will be reusing mathematical formulae that have been used by Colm O Connell. The method I will be using, takes 4 photos at different times, t1, t2, t3 and t4. The location of the object can be calculated at t1 and t4:  
 
-position at time 1
-X1 = (((-1)*b*f)/(d2-d1)) + ((t2 - t1)*(f*Vy - Vx*d2))/(d2-d1)
-Y1 = ( ((d1*(t2 - t1)*Vy) - d1*b)/(d2-d1)) - ((d1*d2*Vx*(t2 - t1))/(f*(d2-d1)))
-Z1 = X1*(dz1/f)
+position at time 1  
+X1 = (((-1)*b*f)/(d2-d1)) + ((t2 - t1)*(f*Vy - Vx*d2))/(d2-d1)  
+Y1 = ( ((d1*(t2 - t1)*Vy) - d1*b)/(d2-d1)) - ((d1*d2*Vx*(t2 - t1))/(f*(d2-d1)))  
+Z1 = X1*(dz1/f)  
 
-position at time 4
-X4 = (f*b/(d3-d4)) + (((t4 - t3)*(Vx*d3 - Vy*f))/(d3-d4))
-Y4 = (((b*d3)-(d4*(t4 - t3)*Vy))/(d3-d4)) + (((t4 - t3)*Vx*d4*d3)/(f*(d3-d4)))
-Z4 = X4*(dz4/f)
+position at time 4  
+X4 = (f*b/(d3-d4)) + (((t4 - t3)*(Vx*d3 - Vy*f))/(d3-d4))  
+Y4 = (((b*d3)-(d4*(t4 - t3)*Vy))/(d3-d4)) + (((t4 - t3)*Vx*d4*d3)/(f*(d3-d4)))  
+Z4 = X4*(dz4/f)  
 
 b = baseline
 f = focal length
@@ -106,10 +106,18 @@ IMPLEMENTATION
 - SOLUTION VERIFICATION
 For the purpose of verifying the validity of my project, I positioned an object at set locations and compared it against the output of my program
 - SOFTWARE DESIGN VERIFICATION
+  + show how centroids were found
+  + show how many objects are found
+  + show how cameras were aligned
+  + UML diagrams of how main method works
 - SOFTWARE VERIFICATION
+  + how to perform a table top experiment using predefined pictures and predefined timestamps
 - VALIDATION/MEASUREMENTS
 
 ##7.Conclusions
+- implications of my work
+- contribution to the state of the art
+- discuss whether results are general, potentially generalised or specific to a particular case
 
 ##8.References
 

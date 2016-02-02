@@ -103,6 +103,11 @@ LOW LEVEL DESIGN
 IMPLEMENTATION
 
 ##6.Evaluation
+- SOLUTION VERIFICATION
+For the purpose of verifying the validity of my project, I positioned an object at set locations and compared it against the output of my program
+- SOFTWARE DESIGN VERIFICATION
+- SOFTWARE VERIFICATION
+- VALIDATION/MEASUREMENTS
 
 ##7.Conclusions
 

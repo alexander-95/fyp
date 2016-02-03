@@ -68,39 +68,39 @@ X4 = (f*b/(d3-d4)) + (((t4 - t3)*(Vx*d3 - Vy*f))/(d3-d4))
 Y4 = (((b*d3)-(d4*(t4 - t3)*Vy))/(d3-d4)) + (((t4 - t3)*Vx*d4*d3)/(f*(d3-d4)))  
 Z4 = X4*(dz4/f)  
 
-b = baseline
-f = focal length
-d1, d2, d3, d4 = disparity in x direction in photo taken at t1, t2, t3 and t4 respectively.
-dz1, dz2, dz3, dz4 = disparity in y direction in photo taken at t1, t2, t3, t4 respectively.
-t1, t2, t3, t4 = time at which img1, img2, img3 and img4 were taken at respectively.
-(x1, y1), (x1, y1), (x1, y1), (x1, y1) = pixel coordinates of point of interest in photo taken at t1, t2, t3 and t4 respectively.
+b = baseline  
+f = focal length  
+d1, d2, d3, d4 = disparity in x direction in photo taken at t1, t2, t3 and t4 respectively.  
+dz1, dz2, dz3, dz4 = disparity in y direction in photo taken at t1, t2, t3, t4 respectively.  
+t1, t2, t3, t4 = time at which img1, img2, img3 and img4 were taken at respectively.  
+(x1, y1), (x1, y1), (x1, y1), (x1, y1) = pixel coordinates of point of interest in photo taken at t1, t2, t3 and t4 respectively.  
 
-some extra variables
-z1 = x1*(dz1/f)
+some extra variables  
+z1 = x1*(dz1/f)  
 z2 = x2*(dz2/f)  
-Vz = (z2 - z1)/(t2 - t1)
+Vz = (z2 - z1)/(t2 - t1)  
 
-num = (A*b*(d2-d4))+(C*b*(d3-d1))
-denom = (C*((t2 - t1)*(d3-d1)-(t3 - t1)*(d2-d1))) + (A*((t4 - t3)*(d2-d4)-(t4 - t2)*(d3-d4)))
-Vy = num/denom
+num = (A*b*(d2-d4))+(C*b*(d3-d1))  
+denom = (C*((t2 - t1)*(d3-d1)-(t3 - t1)*(d2-d1))) + (A*((t4 - t3)*(d2-d4)-(t4 - t2)*(d3-d4)))  
+Vy = num/denom  
 
-num = (f*b*(d2-d4)) - ((t4 - t3)*f*Vy*(d2-d4)) + ((t4 - t2)*f*Vy*(d3-d4))
-denom = (t4 - t2)*d2*(d3-d4) - (t4 - t3)*d3*(d2-d4)
-Vx = num/denom
+num = (f*b*(d2-d4)) - ((t4 - t3)*f*Vy*(d2-d4)) + ((t4 - t2)*f*Vy*(d3-d4))  
+denom = (t4 - t2)*d2*(d3-d4) - (t4 - t3)*d3*(d2-d4)  
+Vx = num/denom  
 
-A = ((t2 - t1)*d2*(d3-d1)) - ((t3 - t1)*d3*(d2-d1))
-C = ((t4 - t2)*d2*(d2-d4)) - ((t4 - t3)*d3*(d3-d4))
+A = ((t2 - t1)*d2*(d3-d1)) - ((t3 - t1)*d3*(d2-d1))  
+C = ((t4 - t2)*d2*(d2-d4)) - ((t4 - t3)*d3*(d3-d4))  
 
 
-DIAGRAM AND EXPLANATION OF CAMERA SETUP
-HIGH LEVEL DESIGN
+DIAGRAM AND EXPLANATION OF CAMERA SETUP  
+HIGH LEVEL DESIGN  
 To make the images easier to analyse, I will be taking photos of a dark target against a light background, or vice versa.
 The photos will be converted to greyscale and thresholded. The time at which the photos were taken will be recorded and the location of the object in the image using blob detection. Noise reduction may be necessary in places to smooth out the image. Most of the image manipulation will be done using python opencv.
 
-LOW LEVEL DESIGN
+LOW LEVEL DESIGN  
 
 
-IMPLEMENTATION
+IMPLEMENTATION  
 
 ##6.Evaluation
 - SOLUTION VERIFICATION
@@ -118,7 +118,14 @@ For the purpose of verifying the validity of my project, I positioned an object 
 - implications of my work
 - contribution to the state of the art
 - discuss whether results are general, potentially generalised or specific to a particular case
+- identify threats to the validity of results(limitations and risks)
+- Discuss approach (probably irrelevant?)
+- Discuss future work
 
 ##8.References
-
+- list of cited work(IEEE guidelines)
 ##9.Appendices
+- source code
+- project management
+- significant deviations from plan
+- things to do differently if done again

@@ -41,12 +41,15 @@ In traditional stereo vision, 2 cameras, A and B, are set up front and parallel.
 
 Once the cameras are set up as described above, A photo is taken with each camera at the same time. Next the object must be located in both images. X-Y coordinates in pixels are used to describe the location of the object in the image. The interesting measurement is the Z coordinate, or depth.  
 
+```python
 Z=f*b/d  
+```
 
 In a typical synchronous stereo vision technique, the assumption is made that the cameras can take pictures at the same time. This is not true in a single threaded application where only one camera can be controlled at a time. This can be demonstrated with pseudo code:  
-
+```python
 frame1 = capL.read()  
 frame2 = capR.read()  
+```
 
 There will always be a time delay between each line of code being executed.  
 
@@ -54,7 +57,7 @@ Most stereo vision techniques make the assumption that the cameras are pointing 
 
 In a scene that has many features, it can be hard to locate the object of interest. In order to track an object, the same feature point must be recognised from both cameras. There is also the problem of getting multiple matches in feature recognition. The next decision would be what entity to track.  
 
-I will need to know the intrinsic parameters of the cameras that I will be using. Firstly, I will need to know the focal length of the cameras since it's one of the key variables in the triangulation process. I will also need to know how big the camera sensor is and the dimensions of a pixel. The only unit of measurement I will have for the images I take, is pixels whereas any measurements in the outside world will be taken in millimeters. Finding the size of a single pixel will allow me to convert between the 2 units of measurement.  
+I will need to know the intrinsic parameters of the cameras that I will be using. Firstly, I will need to know the focal length of the cameras since it's one of the key variables in the triangulation process. I will also need to know how big the camera sensor is and the dimensions of a pixel. The only unit of measurement I will have for the images I take, is pixels whereas any measurements in the outside world will be taken in millimeters. Finding the size of a single pixel will allow me to convert between the two units of measurement.  
 
 
 ##5.The Solution
@@ -101,9 +104,14 @@ To make the images easier to analyse, I will be taking photos of a dark target a
 The photos will be converted to greyscale and thresholded. The time at which the photos were taken will be recorded and the location of the object in the image using blob detection. Noise reduction may be necessary in places to smooth out the image. Most of the image manipulation will be done using python opencv.
 
 LOW LEVEL DESIGN  
-
+- convert color  
+- gaussian blur  
+- threshold  
+- centroid  
+- getMetrics   
 
 IMPLEMENTATION  
+
 
 ##6.Evaluation
 - SOLUTION VERIFICATION

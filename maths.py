@@ -1,4 +1,5 @@
 import math
+import numpy as np
 
 #get the length of a line
 def length(p1,p2):
@@ -50,7 +51,7 @@ def getLocation(l, r, f, b):
 
 #gets the location using asynchronous stereo vision
 
-def getMetrics(l1,rl,l2,r2,t,f,b):
+def getMetrics(l1,r1,l2,r2,t,f,b):
     #relative time between each photo
     t1 = t[0]
     t2 = t[1]
@@ -81,7 +82,7 @@ def getMetrics(l1,rl,l2,r2,t,f,b):
     dz3 = 240 - y3
     dz4 = 240 - y4
 
-    print dz1, dz2,dz3,dz4
+    #print dz1, dz2,dz3,dz4
 
     b = px(80.0) #baseline
     f = float(px(4.0))  #focal length
@@ -98,38 +99,48 @@ def getMetrics(l1,rl,l2,r2,t,f,b):
     num = (A*b*(d2-d4))+(C*b*(d3-d1))
     denom = (C*((t2 - t1)*(d3-d1)-(t3 - t1)*(d2-d1))) + (A*((t4 - t3)*(d2-d4)-(t4 - t2)*(d3-d4)))
     
-    print 'num =', num
-    print 'denom =', denom
-    Vy = float(num)/denom
-
+    #print 'num =', num
+    #print 'denom =', denom
+    if denom !=0:
+        Vy = float(num)/denom
+    else:
+        Vy = 0
     num = (f*b*(d2-d4)) - ((t4 - t3)*f*Vy*(d2-d4)) + ((t4 - t2)*f*Vy*(d3-d4))
     denom = (t4 - t2)*d2*(d3-d4) - (t4 - t3)*d3*(d2-d4)
-    print 'num =',num
-    print 'denom =', denom
-    Vx = float(num)/denom
-
+    #print 'num =',num
+    #print 'denom =', denom
+    if denom!=0:
+        Vx = float(num)/denom
+    else:
+        Vx = 0
     #position at time 1
     X1 = (((-1)*b*f)/(d2-d1)) + ((t2 - t1)*(f*Vy - Vx*d2))/(d2-d1)
+    X1*=-1
     Y1 = ( ((d1*(t2 - t1)*Vy) - d1*b)/(d2-d1)) - ((d1*d2*Vx*(t2 - t1))/(f*(d2-d1)))
-    Z1 = x1*(dz1/f)
+    Z1 = X1*(dz1/f)
 
     #position at time 4
     X4 = (f*b/(d3-d4)) + (((t4 - t3)*(Vx*d3 - Vy*f))/(d3-d4))
+    X4*=-1
     Y4 = (((b*d3)-(d4*(t4 - t3)*Vy))/(d3-d4)) + (((t4 - t3)*Vx*d4*d3)/(f*(d3-d4)))
-    Z4 = x4*(dz4/f)
+    Z4 = X4*(dz4/f)
 
     xdiff = X4 - X1
     ydiff = Y4 - Y1
     zdiff = Z4 - Z1
 
+    v = np.power(np.power(xdiff, 3) + np.power(ydiff, 3) + np.power(ydiff, 3), 1/3.0)
+    v*=(t[3]-t[0])
+    print "v:",mm(v)
+
     print 't1:',mm(X1), mm(Y1), mm(Z1)
     print 't4:',mm(X4), mm(Y4), mm(Z4)
-    print 'diff:',mm(xdiff), mm(ydiff), mm(zdiff)
+    #print 'diff:',mm(xdiff), mm(ydiff), mm(zdiff)
     #print 'height',length((460.0, 59.0), (484.0, 444.0))
     #print 'px per mm', pixel_length(100.0, 200.0, 385.0, 4.0)
     #print 'width',length((117.0, 299.0),(629.0, 291.0))
     #print 'px per mm', pixel_length(100.0, 150.0, 512.0, 4.0)
-
+    return (mm(X1), mm(Y1), mm(Z1))
 
 def mathExample():
     #relative time between each photo
@@ -179,14 +190,14 @@ def mathExample():
     num = (A*b*(d2-d4))+(C*b*(d3-d1))
     denom = (C*((t2 - t1)*(d3-d1)-(t3 - t1)*(d2-d1))) + (A*((t4 - t3)*(d2-d4)-(t4 - t2)*(d3-d4)))
     
-    print 'num =', num
-    print 'denom =', denom
+    #print 'num =', num
+    #print 'denom =', denom
     Vy = float(num)/denom
 
     num = (f*b*(d2-d4)) - ((t4 - t3)*f*Vy*(d2-d4)) + ((t4 - t2)*f*Vy*(d3-d4))
     denom = (t4 - t2)*d2*(d3-d4) - (t4 - t3)*d3*(d2-d4)
-    print 'num =',num
-    print 'denom =', denom
+    #print 'num =',num
+    #print 'denom =', denom
     Vx = float(num)/denom
 
     #position at time 1
@@ -205,7 +216,7 @@ def mathExample():
 
     print 't1:',mm(X1), mm(Y1), mm(Z1)
     print 't4:',mm(X4), mm(Y4), mm(Z4)
-    print 'diff:',mm(xdiff), mm(ydiff), mm(zdiff)
+    #print 'diff:',mm(xdiff), mm(ydiff), mm(zdiff)
     #print 'height',length((460.0, 59.0), (484.0, 444.0))
     #print 'px per mm', pixel_length(100.0, 200.0, 385.0, 4.0)
     #print 'width',length((117.0, 299.0),(629.0, 291.0))

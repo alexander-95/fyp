@@ -5,8 +5,8 @@ from maths import getLocation
 import numpy as np
 
 #setup webcams
-capL = cv2.VideoCapture(0)
-capR = cv2.VideoCapture(1)
+capL = cv2.VideoCapture(1)
+capR = cv2.VideoCapture(2)
 
 kernel = np.ones((5,5),np.uint8)
 
@@ -34,14 +34,16 @@ while True:
     contoursL, hierarchyL = cv2.findContours(frameL.copy(), cv2.RETR_LIST,cv2.CHAIN_APPROX_NONE)
     momentsL = [cv2.moments(cnt) for cnt in contoursL]
     centroidsL = [(int (round(m['m10']/m['m00'])), int(round(m['m01']/m['m00']))) for m in momentsL if m['m00']!=0]
-    centroidsL.pop()
+    if len(centroidsL)>1:
+        centroidsL.pop()
     for c in centroidsL:
         cv2.circle(frameL,c,5,(255,0,0))
 
     contoursR, hierarchyR = cv2.findContours(frameR.copy(), cv2.RETR_LIST,cv2.CHAIN_APPROX_NONE)
     momentsR = [cv2.moments(cnt) for cnt in contoursR]
     centroidsR = [(int (round(m['m10']/m['m00'])), int(round(m['m01']/m['m00']))) for m in momentsR if m['m00']!=0]
-    centroidsR.pop()
+    if len(centroidsR)>1:
+        centroidsR.pop()
     for c in centroidsR:
         cv2.circle(frameR,c,5,(255,0,0))
     #print 'Left',centroidsL,'\tRight',centroidsR
@@ -50,7 +52,7 @@ while True:
     if(len(centroidsL)==1) and (len(centroidsR)==1):
         print centroidsL[0]
         print centroidsR[0]
-        print 'Location:',getLocation(centroidsL[0], centroidsR[0], 4, 100)
+        print 'Location:',getLocation(centroidsL[0], centroidsR[0], 4, 80)
 
     #project crosshairs onto image
     frameL = cv2.cvtColor(frameL, cv2.COLOR_GRAY2BGR)

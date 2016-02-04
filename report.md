@@ -6,6 +6,7 @@
 
 ##1.Abstract
 
+
 ##2.Introduction
 introduction to the addressed topic:
 The topic being addressed by this project is stereo computer vision, the use of 2 cameras to get information in a 3D environment. My project specifically focuses on the implementation of an asynchronous technique.
@@ -52,6 +53,8 @@ There will always be a time delay between each line of code being executed.
 Most stereo vision techniques make the assumption that the cameras are pointing front and parallel. The alignment of the cameras is a big factor in the accuracy of the photos being taken, especially at long distances. Having the cameras perfectly aligned is an important problem to solve.  
 
 In a scene that has many features, it can be hard to locate the object of interest. In order to track an object, the same feature point must be recognised from both cameras. There is also the problem of getting multiple matches in feature recognition. The next decision would be what entity to track.  
+
+I will need to know the intrinsic parameters of the cameras that I will be using. Firstly, I will need to know the focal length of the cameras since it's one of the key variables in the triangulation process. I will also need to know how big the camera sensor is and the dimensions of a pixel. The only unit of measurement I will have for the images I take, is pixels whereas any measurements in the outside world will be taken in millimeters. Finding the size of a single pixel will allow me to convert between the 2 units of measurement.  
 
 
 ##5.The Solution

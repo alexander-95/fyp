@@ -64,14 +64,14 @@ I will need to know the intrinsic parameters of the cameras that I will be using
 ANALYTICAL WORK
 Since this project is a continuation of a previous project, I will be reusing mathematical formulae that have been used by Colm O Connell. The method I will be using, takes 4 photos at different times, t1, t2, t3 and t4. The location of the object can be calculated at t1 and t4:  
 
-- position at time 1  
+- position at time 1:
 ```python
 X1 = (((-1)*b*f)/(d2-d1)) + ((t2 - t1)*(f*Vy - Vx*d2))/(d2-d1)  
 Y1 = ( ((d1*(t2 - t1)*Vy) - d1*b)/(d2-d1)) - ((d1*d2*Vx*(t2 - t1))/(f*(d2-d1)))  
 Z1 = X1*(dz1/f)  
 ```
 
-- position at time 4  
+- position at time 4:
 ```python
 X4 = (f*b/(d3-d4)) + (((t4 - t3)*(Vx*d3 - Vy*f))/(d3-d4))  
 Y4 = (((b*d3)-(d4*(t4 - t3)*Vy))/(d3-d4)) + (((t4 - t3)*Vx*d4*d3)/(f*(d3-d4)))  
@@ -115,11 +115,17 @@ LOW LEVEL DESIGN
 - getMetrics   
 
 IMPLEMENTATION  
-
+- anything else of interest
+  + move onto bigger things: track an aircraft.
+  + run experiment to test limits of the program.
 
 ##6.Evaluation
 - SOLUTION VERIFICATION
-For the purpose of verifying the validity of my project, I positioned an object at set locations and compared it against the output of my program
+For the purpose of verifying the validity of my project, I positioned an object at set locations and compared it against the output of my program.
+[insert diagram here]
+The above diagram shows how the object moves along a diagonal line at set intervals. This is to simulate constant velocity. The x and z coordinates are clear from the diagram. The y coordinate can be calculated using images from the camera. The y coordinate should be constant since the object is moving along the floor. The following diagram shows how the y position can be calculated:  
+[insert diagram here]
+
 - SOFTWARE DESIGN VERIFICATION
   + show how centroids were found
   + show how many objects are found

@@ -4,6 +4,8 @@
 ####12327311
 ###Development of an Asynchronous Stereo Vision Technique to be Implemented in a Visual Radar Tracking System
 
+\pagebreak
+
 ##1.Abstract
 
 
@@ -59,7 +61,6 @@ In a scene that has many features, it can be hard to locate the object of intere
 
 I will need to know the intrinsic parameters of the cameras that I will be using. Firstly, I will need to know the focal length of the cameras since it's one of the key variables in the triangulation process. I will also need to know how big the camera sensor is and the dimensions of a pixel. The only unit of measurement I will have for the images I take, is pixels whereas any measurements in the outside world will be taken in millimeters. Finding the size of a single pixel will allow me to convert between the two units of measurement.  
 
-
 ##5.The Solution
 ANALYTICAL WORK
 Since this project is a continuation of a previous project, I will be reusing mathematical formulae that have been used by Colm O Connell. The method I will be using, takes 4 photos at different times, t1, t2, t3 and t4. The location of the object can be calculated at t1 and t4:  
@@ -84,7 +85,7 @@ Z4 = X4*(dz4/f)
 - t1, t2, t3, t4 = time at which img1, img2, img3 and img4 were taken at respectively.  
 - (x1, y1), (x1, y1), (x1, y1), (x1, y1) = pixel coordinates of point of interest in photo taken at t1, t2, t3 and t4 respectively.  
 
-- some extra variables  
+- some extra variables
 ```python
 z1 = x1*(dz1/f)  
 z2 = x2*(dz2/f)  
@@ -118,18 +119,21 @@ IMPLEMENTATION
 - anything else of interest
   + move onto bigger things: track an aircraft.
   + run experiment to test limits of the program.
+  + NTP ip cameras
+  + build rig for mounting cameras
+  + mention trade-off between FOV and accuracy,(diluting the pixels)
 
 ##6.Evaluation
 - SOLUTION VERIFICATION
-For the purpose of verifying the validity of my project, I positioned an object at set locations and compared it against the output of my program.
-[insert diagram here]
+For the purpose of verifying the validity of my project, I positioned an object at set locations and compared it against the output of my program.  
+[insert diagram here]  
 The above diagram shows how the object moves along a diagonal line at set intervals. This is to simulate constant velocity. The x and z coordinates are clear from the diagram. The y coordinate can be calculated using images from the camera. The y coordinate should be constant since the object is moving along the floor. The following diagram shows how the y position can be calculated:  
-[insert diagram here]
+[insert diagram here]  
 
 - SOFTWARE DESIGN VERIFICATION
-  + show how centroids were found
-  + show how many objects are found
-  + show how cameras were aligned
+  + show how centroids were found (vision notes)
+  + show how to count the number of objects in the scene
+  + show how cameras were aligned (and maybe stereo calibration)
   + UML diagrams of how main method works
 - SOFTWARE VERIFICATION
   + how to perform a table top experiment using predefined pictures and predefined timestamps
@@ -142,6 +146,12 @@ The above diagram shows how the object moves along a diagonal line at set interv
 - identify threats to the validity of results(limitations and risks)
 - Discuss approach (probably irrelevant?)
 - Discuss future work
+
+The asynchronous stereo vision technique that is used in this project removes the epipolar geometry. This means that the cameras don't have to be looking at the same scene. This allows the cameras to be spaced further apart. A larger baseline gives greater accuracy for objects further away.  
+
+The asynchronous technique, by definition, means that the cameras don't have to be synchronised. This means that they don't have to be connected to the same machine. This can open up doors to using distributed cameras to track objects.  
+
+The technique used in this project could be interpreted as an intersection of planes problem. A vector can be created from the camera to the object at 2 different times. As long as the object moves, the vectors will not be parallel. This allows us to create a plane which both vectors sit on. Another pair of vectors and a plane can be produced using the second camera. The intersection of these 2 planes can be used to represent the trajectory of the object. This allows the use of simpler matrix operations instead of a geometric approach. 
 
 ##8.References
 - list of cited work(IEEE guidelines)

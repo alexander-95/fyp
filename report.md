@@ -136,7 +136,7 @@ The above diagram shows how the object moves along a diagonal line at set interv
   + show how cameras were aligned (and maybe stereo calibration)
   + UML diagrams of how main method works
 - SOFTWARE VERIFICATION
-  + how to perform a table top experiment using predefined pictures and predefined timestamps
+  + how to perform a table top experiment using predefined pictures and predefined timestamps.
 - VALIDATION/MEASUREMENTS
 
 ##7.Conclusions
@@ -151,7 +151,10 @@ The asynchronous stereo vision technique that is used in this project removes th
 
 The asynchronous technique, by definition, means that the cameras don't have to be synchronised. This means that they don't have to be connected to the same machine. This can open up doors to using distributed cameras to track objects.  
 
-The technique used in this project could be interpreted as an intersection of planes problem. A vector can be created from the camera to the object at 2 different times. As long as the object moves, the vectors will not be parallel. This allows us to create a plane which both vectors sit on. Another pair of vectors and a plane can be produced using the second camera. The intersection of these 2 planes can be used to represent the trajectory of the object. This allows the use of simpler matrix operations instead of a geometric approach. 
+The technique used in this project could be interpreted as an intersection of planes problem. A vector can be created from the camera to the object at 2 different times. As long as the object moves, the vectors will not be parallel. This allows us to create a plane which both vectors sit on. Another pair of vectors and a plane can be produced using the second camera. The intersection of these 2 planes can be used to represent the trajectory of the object. This allows the use of simpler matrix operations instead of a geometric approach.  
+
+
+The main limitation to the approach that I've taken is that the object is assumed to have constant velocity. This means that the object moves in a straight line and at a constant speed. In the interest of accuracy, The time between images being taken is minimised to   
 
 ##8.References
 - list of cited work(IEEE guidelines)

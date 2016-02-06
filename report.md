@@ -7,7 +7,9 @@
 \pagebreak
 
 ##1.Abstract
+Get on with it
 
+\pagebreak
 
 ##2.Introduction
 introduction to the addressed topic:
@@ -23,6 +25,8 @@ summary of how project was approached:
 how to evaluate work
 describe achievements
 
+\pagebreak
+
 ##3.Technical Background
 - research into synchronous stereo vision
 - xbox 360 kinect sensor
@@ -31,6 +35,8 @@ describe achievements
 - lack of research in asychronous stereo vision
 
 - docs.opencv.org
+
+\pagebreak
 
 ##4.The Problem
 - describe synchronous stereo vision
@@ -60,6 +66,8 @@ Most stereo vision techniques make the assumption that the cameras are pointing 
 In a scene that has many features, it can be hard to locate the object of interest. In order to track an object, the same feature point must be recognised from both cameras. There is also the problem of getting multiple matches in feature recognition. The next decision would be what entity to track.  
 
 I will need to know the intrinsic parameters of the cameras that I will be using. Firstly, I will need to know the focal length of the cameras since it's one of the key variables in the triangulation process. I will also need to know how big the camera sensor is and the dimensions of a pixel. The only unit of measurement I will have for the images I take, is pixels whereas any measurements in the outside world will be taken in millimeters. Finding the size of a single pixel will allow me to convert between the two units of measurement.  
+
+\pagebreak
 
 ##5.The Solution
 ANALYTICAL WORK
@@ -123,6 +131,8 @@ IMPLEMENTATION
   + build rig for mounting cameras
   + mention trade-off between FOV and accuracy,(diluting the pixels)
 
+\pagebreak
+
 ##6.Evaluation
 - SOLUTION VERIFICATION
 For the purpose of verifying the validity of my project, I positioned an object at set locations and compared it against the output of my program.  
@@ -139,6 +149,8 @@ The above diagram shows how the object moves along a diagonal line at set interv
   + how to perform a table top experiment using predefined pictures and predefined timestamps.
 - VALIDATION/MEASUREMENTS
 
+\pagebreak
+
 ##7.Conclusions
 - implications of my work
 - contribution to the state of the art
@@ -147,17 +159,34 @@ The above diagram shows how the object moves along a diagonal line at set interv
 - Discuss approach (probably irrelevant?)
 - Discuss future work
 
+####IMPLICATIONS
 The asynchronous stereo vision technique that is used in this project removes the epipolar geometry. This means that the cameras don't have to be looking at the same scene. This allows the cameras to be spaced further apart. A larger baseline gives greater accuracy for objects further away.  
 
 The asynchronous technique, by definition, means that the cameras don't have to be synchronised. This means that they don't have to be connected to the same machine. This can open up doors to using distributed cameras to track objects.  
 
+####CONTRIBUTION
 The technique used in this project could be interpreted as an intersection of planes problem. A vector can be created from the camera to the object at 2 different times. As long as the object moves, the vectors will not be parallel. This allows us to create a plane which both vectors sit on. Another pair of vectors and a plane can be produced using the second camera. The intersection of these 2 planes can be used to represent the trajectory of the object. This allows the use of simpler matrix operations instead of a geometric approach.  
 
+####LIMITATIONS
+The main limitation to the approach that I've taken is that the object is assumed to have constant velocity. This means that the object moves in a straight line and at a constant speed. In the interest of accuracy, The time between images being taken is minimised to overcome this limitation.  
 
-The main limitation to the approach that I've taken is that the object is assumed to have constant velocity. This means that the object moves in a straight line and at a constant speed. In the interest of accuracy, The time between images being taken is minimised to   
+Using my current setup, I can only identify an object, if it is the only object in the scene. I have not implemented any other recognition features. This could cause problems if the cameras are looking at a target from different viewpoints. This is a potential limitation for an intersection of planes method which relies on different viewpoints.  
+
+####FUTURE WORK
+- track multiple targets
+- track using independent cameras
+- Use more robust recognition
+
+A good move forward would be to track multiple objects at the same time. This would involve an intelligent way of mapping objects from one scene to the next.
+
+Another advancement could be to use cameras with different orientations. In my current setup, I have cameras that are front and parallel. This simplifies calculations since the yaw, pitch and roll of the cameras are equal. This means that such variables can be disregarded from the calculations. By taking these variables into account, the cameras could be set up at different orientations. Complexity is added by having to work out the extra angles. Smartphones have all the capabilities to track position using GPS and orientation using a compass and gyroscope. By using the intersection of planes method, an object could be tracked using two smartphones pointing at the target from 2 different viewpoints. 
+
+\pagebreak
 
 ##8.References
 - list of cited work(IEEE guidelines)
+
+\pagebreak
 
 ##9.Appendices
 - source code

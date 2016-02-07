@@ -117,11 +117,11 @@ To make the images easier to analyse, I will be taking photos of a dark target a
 The photos will be converted to greyscale and thresholded. The time at which the photos were taken will be recorded and the location of the object in the image using blob detection. Noise reduction may be necessary in places to smooth out the image. Most of the image manipulation will be done using python opencv.
 
 LOW LEVEL DESIGN  
-- convert color  
-- gaussian blur  
-- threshold  
-- centroid  
-- getMetrics   
+- convert color (make the image grayscale)  
+- gaussian blur (noise reduction)  
+- threshold (increase contrast)  
+- centroid (first order moment)  
+- getMetrics (function for stereo vision calculations)  
 
 IMPLEMENTATION  
 - anything else of interest
@@ -148,6 +148,8 @@ The above diagram shows how the object moves along a diagonal line at set interv
 - SOFTWARE VERIFICATION
   + how to perform a table top experiment using predefined pictures and predefined timestamps.
 - VALIDATION/MEASUREMENTS
+  + measuring objects at a known distance
+  +
 
 \pagebreak
 
@@ -179,7 +181,7 @@ Using my current setup, I can only identify an object, if it is the only object 
 
 A good move forward would be to track multiple objects at the same time. This would involve an intelligent way of mapping objects from one scene to the next.
 
-Another advancement could be to use cameras with different orientations. In my current setup, I have cameras that are front and parallel. This simplifies calculations since the yaw, pitch and roll of the cameras are equal. This means that such variables can be disregarded from the calculations. By taking these variables into account, the cameras could be set up at different orientations. Complexity is added by having to work out the extra angles. Smartphones have all the capabilities to track position using GPS and orientation using a compass and gyroscope. By using the intersection of planes method, an object could be tracked using two smartphones pointing at the target from 2 different viewpoints. 
+Another advancement could be to use cameras with different orientations. In my current setup, I have cameras that are front and parallel. This simplifies calculations since the yaw, pitch and roll of the cameras are equal. This means that such variables can be disregarded from the calculations. By taking these variables into account, the cameras could be set up at different orientations. Complexity is added by having to work out the extra angles. Smartphones have all the capabilities to track position using GPS and orientation using a compass and gyroscope. By using the intersection of planes method, an object could be tracked using two smartphones pointing at the target from 2 different viewpoints.
 
 \pagebreak
 

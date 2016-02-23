@@ -127,6 +127,18 @@ The photos will be converted to greyscale and thresholded. The time at which the
   + build rig for mounting cameras
   + mention trade-off between FOV and accuracy,(diluting the pixels)
 
+  solve problem using vectors and planes
+  - camera1 has 2 vectors pointing at t1 and t2 respectively
+  - camera2 has 2 vectors pointing at t3 and t4 respectively
+  - vectors t1 and t2 lie on the plane p1
+  - vectors t3 and t4 lie on the plane p2
+
+find the cross product between t1 and t2. This is the normal vector n1 to the plane p1
+use the normal vector to get the equation of the plane.
+
+repeat the process for the second plane.
+Use a system of linear equations to find the intersection between the 2 planes. This is the trajectory of the object. 
+
 \pagebreak
 
 ##6.Evaluation

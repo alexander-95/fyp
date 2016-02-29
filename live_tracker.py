@@ -1,10 +1,17 @@
 import cv2
 from time import time, sleep
 import numpy as np
-from maths import getMetrics, getLocation
+from maths import getMetrics, getLocation, getPosition
 
-capL = cv2.VideoCapture(1)
-capR = cv2.VideoCapture(2)
+capL = cv2.VideoCapture(2)
+#capL.open('http://192.168.43.180:8081/video.mjpeg')
+capL.set(3,640)
+capL.set(4,480)
+
+capR = cv2.VideoCapture(1)
+#capR.open('http://192.168.43.231:8081/video.mjpeg')
+capR.set(3,640)
+capR.set(4,480)
 
 #kernel for gaussian blur
 kernel = np.ones((5,5),np.uint8)
@@ -71,7 +78,7 @@ while True:
         #print 'object =',obj
         obj = getMetrics(l1[0],r1[0],l2[0],r2[0],t,4,80)
         print 'object =',obj
-    
+        getPosition(l1[0],l2[0],r1[0],r2[0],4,[640,480],[80,0,0])
 
     #no more calculations past this point
 

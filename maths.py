@@ -142,6 +142,37 @@ def getMetrics(l1,r1,l2,r2,t,f,b):
     #print 'px per mm', pixel_length(100.0, 150.0, 512.0, 4.0)
     return (mm(X1), mm(Y1), mm(Z1))
 
+def getPosition(l1, l2, r1, r2, f, r, c):
+    X1 = 1/l1[0]
+    X2 = 1/l2[0] 
+    X3 = 1/r1[0]
+    X4 = 1/r2[0]
+
+    Y1 = 1/l1[1]
+    Y2 = 1/l2[1]
+    Y3 = 1/r1[1]
+    Y4 = 1/r2[1]
+
+    Xc = c[0]
+    Yc = c[1]
+    Zc = c[2]
+
+    #p1 = (Y2-Y1)x + (X2-X1)y + ((X1*Y2-X2*Y1)/f)z = 0
+    #p2 = (Y3 - Y4 + Xc)x + (X4-X3+Yc)y + (((X3*Y4-X4*Y3)/f)+Zc)z - ((Y3 - Y4 + Xc)Xc + (X4-X3+Yc)Yc + (((X3*Y4-X4*Y3)/f)+Zc)Zc) = 0
+    
+    A = Y1-Y2
+    B = X2-X1
+    C = (X1*Y2-X2*Y1)/f
+    D = (Y3-Y4) + Xc
+    E = (X4-X3) + Yc
+    F = ((X3*Y4-X4*Y3)/f) + Zc
+    G = (D*Xc + E*Yc + F*Zc)*(-1)
+
+    z1 = ((-B*G*f)/(X1*(E*A-B*D))) + ((-B*G)/(E*C-B*F))
+    y1 = Y1*z1/f
+    x1 = X1*z1/f
+    print()
+
 def mathExample():
     #relative time between each photo
     t1 = 1.0

@@ -3,15 +3,17 @@ from time import time, sleep
 import numpy as np
 from maths import getMetrics, getLocation, getPosition
 
+res = [1280,720]
+
 capL = cv2.VideoCapture(2)
 #capL.open('http://192.168.43.180:8081/video.mjpeg')
-capL.set(3,640)
-capL.set(4,480)
+capL.set(3,res[0])
+capL.set(4,res[1])
 
 capR = cv2.VideoCapture(1)
 #capR.open('http://192.168.43.231:8081/video.mjpeg')
-capR.set(3,640)
-capR.set(4,480)
+capR.set(3,res[0])
+capR.set(4,res[1])
 
 #kernel for gaussian blur
 kernel = np.ones((5,5),np.uint8)
@@ -40,8 +42,8 @@ def findObjects(frame):
     centroids = [(int (round(m['m10']/m['m00'])), int(round(m['m01']/m['m00']))) for m in moments if m['m00']!=0]
     if len(centroids)>1:
         centroids.pop()
-    cv2.line(frame, (0, 240), (640, 240), (0, 0, 255))
-    cv2.line(frame, (320, 0), (320, 480), (0, 0, 255))
+    #cv2.line(frame, (0, res[1]/2), (res[0], res[1]/2), (0, 0, 255))
+    #cv2.line(frame, (res[0]/2, 0), (res[0]/2, res[1]), (0, 0, 255))
     for c in centroids:
         cv2.circle(frame,c,5,(255,0,0))
     return centroids
@@ -63,10 +65,10 @@ while True:
     r2 = findObjects(frame4)
     frame3 = cv2.cvtColor(frame3, cv2.COLOR_GRAY2BGR)
     frame4 = cv2.cvtColor(frame4, cv2.COLOR_GRAY2BGR)
-    cv2.line(frame3, (0, 240), (640, 240), (0, 0, 255))
-    cv2.line(frame3, (320, 0), (320, 480), (0, 0, 255))
-    cv2.line(frame4, (0, 240), (640, 240), (0, 0, 255))
-    cv2.line(frame4, (320, 0), (320, 480), (0, 0, 255))
+    cv2.line(frame3, (0, res[1]/2), (res[0], res[1]/2), (0, 0, 255))
+    cv2.line(frame3, (res[0]/2, 0), (res[0]/2, res[1]), (0, 0, 255))
+    cv2.line(frame4, (0, res[1]/2), (res[0], res[1]/2), (0, 0, 255))
+    cv2.line(frame4, (res[0]/2, 0), (res[0]/2, res[1]), (0, 0, 255))
 
     cv2.imshow('frame1',frame1)
     cv2.imshow('frame2',frame2)

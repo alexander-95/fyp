@@ -4,6 +4,7 @@ import numpy as np
 from maths import getMetrics, getLocation, getPosition
 
 res = [1280,720]
+kernel = np.ones((21,21),np.uint8)
 
 capL = cv2.VideoCapture(2)
 #capL.open('http://192.168.43.180:8081/video.mjpeg')
@@ -31,16 +32,18 @@ t[3] = time()
 
 frame1 = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
 frame2 = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
-frame1 = cv2.GaussianBlur(frame1,(5,5),0)
-frame2 = cv2.GaussianBlur(frame2,(5,5),0)
-cv2.threshold(frame1, 40, 255, cv2.THRESH_BINARY, frame1)
-cv2.threshold(frame2, 40, 255, cv2.THRESH_BINARY, frame2)
+frame1 = cv2.GaussianBlur(frame1,(9,9),0)
+frame2 = cv2.GaussianBlur(frame2,(9,9),0)
+cv2.threshold(frame1, 50, 255, cv2.THRESH_BINARY, frame1)
+cv2.threshold(frame2, 50, 255, cv2.THRESH_BINARY, frame2)
+frame1 = cv2.morphologyEx(frame1, cv2.MORPH_CLOSE, kernel)
+frame2 = cv2.morphologyEx(frame2, cv2.MORPH_CLOSE, kernel)
 
 def findObjects(frame):
     contours, hierarchy = cv2.findContours(frame.copy(), cv2.RETR_LIST,cv2.CHAIN_APPROX_NONE)
     moments = [cv2.moments(cnt) for cnt in contours]
     centroids = [(int (round(m['m10']/m['m00'])), int(round(m['m01']/m['m00']))) for m in moments if m['m00']!=0]
-    if len(centroids)>1:
+    if len(centroids)>0 and centroids[0] == (640,360):
         centroids.pop()
     #cv2.line(frame, (0, res[1]/2), (res[0], res[1]/2), (0, 0, 255))
     #cv2.line(frame, (res[0]/2, 0), (res[0]/2, res[1]), (0, 0, 255))
@@ -78,9 +81,9 @@ while True:
     if len(l1) == 1 and len(r1) == 1:
         #obj = getLocation(l1[0],r1[0],4,80)
         #print 'object =',obj
-        obj = getMetrics(l1[0],r1[0],l2[0],r2[0],t,4,80)
+        obj = getMetrics(l1[0],r1[0],l2[0],r2[0],t,4,100)
         print 'object =',obj
-        getPosition(l1[0],l2[0],r1[0],r2[0],4,[640,480],[80,0,0])
+        #getPosition(l1[0],l2[0],r1[0],r2[0],4,[640,480],[80,0,0])
 
     #no more calculations past this point
 

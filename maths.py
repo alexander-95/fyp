@@ -14,19 +14,17 @@ def pixel_length(x1, y1, x2, f):
 
 #convert mm to px
 def px(x):
-    return x*222#192
+    #return x*222#192
+    return x*289
 
 #convert px to mm
 def mm(x):
-    return x/222
+    #return x/222
+    return x/289
 
 ##############################################
 # Mathematical equations for entity tracking #
 ##############################################
-
-#get the absolute difference between 2 values
-#def delta(x, y):
-#    return float(abs(x-y))
 
 #gets the location using synchronous stereo vision
 def getLocation(l, r, f, b):

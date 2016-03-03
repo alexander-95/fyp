@@ -28,13 +28,14 @@ def mm(x):
 
 #gets the location using synchronous stereo vision
 def getLocation(l, r, f, b):
+    res = [1280,960]
     x1 = l[0] #object as seen from the left camera
     y1 = l[1]
     x2 = r[0] #object as seen from the right camera
     y2 = r[1]
-    d1 = x1 - 320
-    dz = y1 - 240
-    d2 = x2 - 320
+    d1 = x1 - (res[0]/2)
+    dz = y1 - (res[1]/2)
+    d2 = x2 - (res[0]/2)
     f = float(px(f))
     b = px(b)
     if d1 != d2:
@@ -50,6 +51,8 @@ def getLocation(l, r, f, b):
 #gets the location using asynchronous stereo vision
 
 def getMetrics(l1,r1,l2,r2,t,f,b):
+    res = [1280,960]
+
     #relative time between each photo
     t1 = t[0]
     t2 = t[1]
@@ -69,21 +72,21 @@ def getMetrics(l1,r1,l2,r2,t,f,b):
     y4 = r2[1]
 
     #disparities in x axis
-    d1 = 320 - x1
-    d2 = 320 - x2
-    d3 = 320 - x3
-    d4 = 320 - x4
+    d1 = (res[0]/2) - x1
+    d2 = (res[0]/2) - x2
+    d3 = (res[0]/2) - x3
+    d4 = (res[0]/2) - x4
     
     #disparities in y axis
-    dz1 = 240 - y1
-    dz2 = 240 - y2
-    dz3 = 240 - y3
-    dz4 = 240 - y4
+    dz1 = (res[1]/2) - y1
+    dz2 = (res[1]/2) - y2
+    dz3 = (res[1]/2) - y3
+    dz4 = (res[1]/2) - y4
 
     #print dz1, dz2,dz3,dz4
 
-    b = px(80.0) #baseline
-    f = float(px(4.0))  #focal length
+    b = float(px(b)) #baseline
+    f = float(px(f))  #focal length
 
     #some extra variables
     z1 = x1*(dz1/f)
@@ -103,6 +106,7 @@ def getMetrics(l1,r1,l2,r2,t,f,b):
         Vy = float(num)/denom
     else:
         Vy = 0
+        print 'vy=0'
     num = (f*b*(d2-d4)) - ((t4 - t3)*f*Vy*(d2-d4)) + ((t4 - t2)*f*Vy*(d3-d4))
     denom = (t4 - t2)*d2*(d3-d4) - (t4 - t3)*d3*(d2-d4)
     #print 'num =',num
@@ -111,6 +115,7 @@ def getMetrics(l1,r1,l2,r2,t,f,b):
         Vx = float(num)/denom
     else:
         Vx = 0
+        print 'vx=0'
     #position at time 1
     X1 = (((-1)*b*f)/(d2-d1)) + ((t2 - t1)*(f*Vy - Vx*d2))/(d2-d1)
     X1*=-1
@@ -141,19 +146,43 @@ def getMetrics(l1,r1,l2,r2,t,f,b):
     return (mm(X1), mm(Y1), mm(Z1))
 
 def getPosition(l1, l2, r1, r2, f, r, c):
-    X1 = 1/l1[0]
-    X2 = 1/l2[0] 
-    X3 = 1/r1[0]
-    X4 = 1/r2[0]
+    X1 = l1[0]
+    X2 = l2[0] 
+    X3 = r1[0]
+    X4 = r2[0]
 
-    Y1 = 1/l1[1]
-    Y2 = 1/l2[1]
-    Y3 = 1/r1[1]
-    Y4 = 1/r2[1]
+    Y1 = l1[1]
+    Y2 = l2[1]
+    Y3 = r1[1]
+    Y4 = r2[1]
 
     Xc = c[0]
     Yc = c[1]
     Zc = c[2]
+
+    # vectors
+    # t1 = < -X1z1/f, -Y1z1/f, z1 >
+    # t2 = < -X2z2/f, -Y2z2/f, z2 >
+    # t3 = < -X3z3/f, -Y3z3/f, z3 >
+    # t4 = < -X4z4/f, -Y4z4/f, z4 >
+    #
+    # n1 = t1 X t2
+    # n2 = t3 X t4
+    #
+    # n1 = < Y2-Y1, X1-X2, (X1Y2-X2Y1)/f >
+    # n2 = < Y4-Y3, X3-X4, X3Y4-X4Y3 > + (Xc, Yc, Zc)
+    #
+    # normal vector = <a,b,c>
+    # plane = ax + by + cz + d = 0
+    #
+    # p1 = (Y2-Y1)x + (X1-X2)y + ((X1Y2-X2Y1)/f)z = 0
+    # p2 = (Y4-Y3)x + (X3-X4)y + ((X3Y4-X4Y3)/f)z + d = 0
+    #
+    # 
+    # 
+
+    
+
 
     #p1 = (Y2-Y1)x + (X2-X1)y + ((X1*Y2-X2*Y1)/f)z = 0
     #p2 = (Y3 - Y4 + Xc)x + (X4-X3+Yc)y + (((X3*Y4-X4*Y3)/f)+Zc)z - ((Y3 - Y4 + Xc)Xc + (X4-X3+Yc)Yc + (((X3*Y4-X4*Y3)/f)+Zc)Zc) = 0

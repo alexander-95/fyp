@@ -170,35 +170,32 @@ def getPosition(l1, l2, r1, r2, f, r, c):
     # n2 = t3 X t4
     #
     # n1 = < Y2-Y1, X1-X2, (X1Y2-X2Y1)/f >
-    # n2 = < Y4-Y3, X3-X4, X3Y4-X4Y3 > + (Xc, Yc, Zc)
+    # n2 = < Y4-Y3, X3-X4, (X3Y4-X4Y3)/f > + (Xc, Yc, Zc)
     #
     # normal vector = <a,b,c>
     # plane = ax + by + cz + d = 0
     #
     # p1 = (Y2-Y1)x + (X1-X2)y + ((X1Y2-X2Y1)/f)z = 0
-    # p2 = (Y4-Y3)x + (X3-X4)y + ((X3Y4-X4Y3)/f)z + d = 0
-    #
+    # p2 = ((Y4-Y3)+Xc)x + ((X3-X4)+Yc)y + (((X3Y4-X4Y3)/f)+Zc)z + d = 0
+    # d = -((Y4-Y3)+Xc)Xc - ((X3-X4)+Yc)Yc - (((X3Y4-X4Y3)/f)+Zc)Zc
     # 
-    # 
+    # p1 = Ax + By + Cz = 0
+    # p2 = Dx + Ey + Fz + G = 0
 
+    A = Y2 - Y1
+    B = X1 - X2
+    C = (X1*Y2 - X2*Y1)/f
+    D = (Y4 - Y3) + Xc
+    E = (X3 - X4) + Yc
+    F = ((X3*Y4 - X4*Y3)/f) + Zc
+    G = -D*Xc - E*Yc - F*Zc
     
+    t = (((X1*(E*A-B*D))/f)+(E*C-B*F))*(-B*G)
+    Vx = (-B*G - (E*C - B*F)*t)/(E*A - B*D)
+    Vy = (-A*G - (C*D - F*A)*t)/(B*D - E*A)
+    Vz = t
 
 
-    #p1 = (Y2-Y1)x + (X2-X1)y + ((X1*Y2-X2*Y1)/f)z = 0
-    #p2 = (Y3 - Y4 + Xc)x + (X4-X3+Yc)y + (((X3*Y4-X4*Y3)/f)+Zc)z - ((Y3 - Y4 + Xc)Xc + (X4-X3+Yc)Yc + (((X3*Y4-X4*Y3)/f)+Zc)Zc) = 0
-    
-    A = Y1-Y2
-    B = X2-X1
-    C = (X1*Y2-X2*Y1)/f
-    D = (Y3-Y4) + Xc
-    E = (X4-X3) + Yc
-    F = ((X3*Y4-X4*Y3)/f) + Zc
-    G = (D*Xc + E*Yc + F*Zc)*(-1)
-
-    z1 = ((-B*G*f)/(X1*(E*A-B*D))) + ((-B*G)/(E*C-B*F))
-    y1 = Y1*z1/f
-    x1 = X1*z1/f
-    print()
 
 def mathExample():
     #relative time between each photo

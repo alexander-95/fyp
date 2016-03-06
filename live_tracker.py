@@ -1,6 +1,4 @@
-import cv40,480],[80,0,0])
- 94 
- 2
+import cv2
 from time import time, sleep
 import numpy as np
 from maths import getMetrics, getLocation, getPosition
@@ -9,7 +7,7 @@ from maths import getMetrics, getLocation, getPosition
 res = [640, 480]
 kernel = np.ones((5,5),np.uint8)
 
-capL = cv2.VideoCapture(1)
+capL = cv2.VideoCapture(0)
 #capL.open('http://192.168.43.180:8081/video.mjpeg')
 #capL.open('http://192.168.1.117:8081/video.mjpeg')
 capL.set(3,res[0])

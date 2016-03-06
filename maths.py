@@ -14,13 +14,13 @@ def pixel_length(x1, y1, x2, f):
 
 #convert mm to px
 def px(x):
-    #return x*222#192
-    return x*289
+    return x*222#192
+    #return x*289
 
 #convert px to mm
 def mm(x):
-    #return x/222
-    return x/289
+    return x/222
+    #return x/289
 
 ##############################################
 # Mathematical equations for entity tracking #
@@ -51,7 +51,8 @@ def getLocation(l, r, f, b):
 #gets the location using asynchronous stereo vision
 
 def getMetrics(l1,r1,l2,r2,t,f,b):
-    res = [1280,960]
+    #res = [1280,960]
+    res = [640, 480]
 
     #relative time between each photo
     t1 = t[0]
@@ -145,20 +146,24 @@ def getMetrics(l1,r1,l2,r2,t,f,b):
     #print 'px per mm', pixel_length(100.0, 150.0, 512.0, 4.0)
     return (mm(X1), mm(Y1), mm(Z1))
 
-def getPosition(l1, l2, r1, r2, f, r, c):
-    X1 = l1[0]
-    X2 = l2[0] 
-    X3 = r1[0]
-    X4 = r2[0]
+def getPosition(l1, l2, r1, r2, f, res, c):
+    X1 = l1[0] - (res[0]/2)
+    X2 = l2[0] - (res[0]/2)
+    X3 = r1[0] - (res[0]/2)
+    X4 = r2[0] - (res[0]/2)
 
-    Y1 = l1[1]
-    Y2 = l2[1]
-    Y3 = r1[1]
-    Y4 = r2[1]
+    Y1 = l1[1] - (res[1]/2)
+    Y2 = l2[1] - (res[1]/2)
+    Y3 = r1[1] - (res[1]/2)
+    Y4 = r2[1] - (res[1]/2)
 
-    Xc = c[0]
-    Yc = c[1]
-    Zc = c[2]
+    Xc = px(c[0])
+    Yc = px(c[1])
+    Zc = px(c[2])
+
+    f = px(float(f))
+
+    #import pdb; pdb.set_trace()
 
     # vectors
     # t1 = < -X1z1/f, -Y1z1/f, z1 >
@@ -182,18 +187,25 @@ def getPosition(l1, l2, r1, r2, f, r, c):
     # p1 = Ax + By + Cz = 0
     # p2 = Dx + Ey + Fz + G = 0
 
-    A = Y2 - Y1
-    B = X1 - X2
+    A = Y1 - Y2
+    B = X2 - X1
     C = (X1*Y2 - X2*Y1)/f
-    D = (Y4 - Y3) + Xc
-    E = (X3 - X4) + Yc
-    F = ((X3*Y4 - X4*Y3)/f) + Zc
-    G = -D*Xc - E*Yc - F*Zc
+    D = (Y3 - Y4)
+    E = (X4 - X3)
+    F = ((X3*Y4 - X4*Y3)/f)
+    G = -(D*Xc + E*Yc + F*Zc)
     
-    t = (((X1*(E*A-B*D))/f)+(E*C-B*F))*(-B*G)
-    Vx = (-B*G - (E*C - B*F)*t)/(E*A - B*D)
-    Vy = (-A*G - (C*D - F*A)*t)/(B*D - E*A)
-    Vz = t
+    #position at t1
+    t = (f*B*G)/((-X1*(E*A - B*D))-(f*(E*C - B*F)))
+    #Vx = (-B*G - (E*C - B*F)*t)/(E*A - B*D)
+    #Vy = (-A*G - (C*D - F*A)*t)/(B*D - E*A)
+    #Vz = t
+    print X1,Y1
+    z=t
+    y=Y1*z/f
+    x=X1*z/f
+    
+    print 'vector position:', mm(-x), mm(y), mm(-z)
 
 
 

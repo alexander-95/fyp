@@ -187,25 +187,20 @@ def getPosition(l1, l2, r1, r2, f, res, c):
     # p1 = Ax + By + Cz = 0
     # p2 = Dx + Ey + Fz + G = 0
 
-    A = Y1 - Y2
-    B = X2 - X1
-    C = (X1*Y2 - X2*Y1)/f
-    D = (Y3 - Y4)
-    E = (X4 - X3)
-    F = ((X3*Y4 - X4*Y3)/f)
-    G = -(D*Xc + E*Yc + F*Zc)
+    A = Y2 - Y1
+    B = X1 - X2
+    C = (X2*Y1 - X1*Y2)/f
+    D = (Y4 - Y3)
+    E = (X3 - X4)
+    F = ((X4*Y3 - X3*Y4)/f)
+    G = (D*Xc + E*Yc + F*Zc)
     
     #position at t1
-    t = (f*B*G)/((-X1*(E*A - B*D))-(f*(E*C - B*F)))
-    #Vx = (-B*G - (E*C - B*F)*t)/(E*A - B*D)
-    #Vy = (-A*G - (C*D - F*A)*t)/(B*D - E*A)
-    #Vz = t
-    print X1,Y1
-    z=t
-    y=Y1*z/f
+    z = (f*B*G)/((-X1*(E*A - B*D))-(f*(E*C - B*F)))
+    y=-Y1*z/f
     x=X1*z/f
     
-    print 'vector position:', mm(-x), mm(y), mm(-z)
+    print 'vector position:', mm(x), mm(y), mm(z)
 
 
 
@@ -289,4 +284,4 @@ def mathExample():
     #print 'width',length((117.0, 299.0),(629.0, 291.0))
     #print 'px per mm', pixel_length(100.0, 150.0, 512.0, 4.0)
 
-mathExample()
+#mathExample()

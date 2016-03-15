@@ -3,17 +3,17 @@ from time import time
 cap = cv2.VideoCapture(1)
 
 #set a new resolution
-cap.set(3,640)
-cap.set(4,480)
+cap.set(3,1280)
+cap.set(4,960)
 
 #reduce the color saturation
-cap.set(12,0.5)
+#cap.set(12,0.5)
 
 #change the brightness
-cap.set(10,0.5)
+#cap.set(10,0.5)
 
 #bump up the contrast
-cap.set(11,0.5)
+#cap.set(11,0.5)
 
 while(True):
     ret, frame = cap.read()

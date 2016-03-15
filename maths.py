@@ -14,13 +14,13 @@ def pixel_length(x1, y1, x2, f):
 
 #convert mm to px
 def px(x):
-    return x*222#192
-    #return x*289
+    #return x*222#192
+    return x*357
 
 #convert px to mm
 def mm(x):
-    return x/222
-    #return x/289
+    #return x/222
+    return x/357
 
 ##############################################
 # Mathematical equations for entity tracking #
@@ -201,8 +201,6 @@ def getPosition(l1, l2, r1, r2, f, res, c):
     x=X1*z/f
     
     print 'vector position:', mm(x), mm(y), mm(z)
-
-
 
 def mathExample():
     #relative time between each photo

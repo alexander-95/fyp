@@ -3,19 +3,19 @@ from time import time, sleep
 import numpy as np
 from maths import getMetrics, getLocation, getPosition
 
-res = [1280, 720]
+#res = [1280, 720]
 delay = 0.0
 blurVal = 13
 counter = 0
-#res = [640, 480]
+res = [640, 480]
 
-capL = cv2.VideoCapture(2)
+capL = cv2.VideoCapture(1)
 #capL.open('http://192.168.43.180:8081/video.mjpeg')
 #capL.open('http://192.168.1.117:8081/video.mjpeg')
 capL.set(3,res[0])
 capL.set(4,res[1])
 
-capR = cv2.VideoCapture(1)
+capR = cv2.VideoCapture(2)
 #capR.open('http://192.168.43.231:8081/video.mjpeg')
 #capR.open('http://192.168.1.116:8081/videp.mjpeg')
 capR.set(3,res[0])
@@ -93,13 +93,14 @@ while True:
     cv2.imshow('frame2',f2)
     cv2.imshow('frame3',f3)
     cv2.imshow('frame4',f4)
-    #print t
+    
+    if cv2.waitKey(1) & 0xFF == ord(' '):
+        cv2.imwrite('frame1.png',frame1)
     if len(l1) == 1 and len(r1) == 1 and len(l2) == 1 and len(r2) == 1:
-        #if cv2.waitKey(1) & 0xFF == ord(' '):
         print
         counter+=1
         print 'interval',counter
-        getPosition(l1[0],l2[0],r1[0],r2[0],t,4,res,[105,0,0])
+        getPosition(l1[0],l2[0],r1[0],r2[0],t,4,res,[85,0,0])
 
     #no more calculations past this point
     

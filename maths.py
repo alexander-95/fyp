@@ -14,13 +14,13 @@ def pixel_length(x1, y1, x2, f):
 
 #convert mm to px
 def px(x):
-    #return x*222#192
-    return x*357
+    return x*222#192
+    #return x*357
 
 #convert px to mm
 def mm(x):
-    #return x/222
-    return x/357
+    return x/222
+    #return x/357
 
 ##############################################
 # Mathematical equations for entity tracking #
@@ -200,15 +200,14 @@ def getPosition(l1, l2, r1, r2, t, f, res, c):
     z1 = (f*B*G)/((-X1*(E*A - B*D))-(f*(E*C - B*F)))
     y1 = -Y1*z1/f
     x1 = X1*z1/f
-    
-    print 'position:', mm(x1), mm(y1), mm(z1)
+    print 'position1:', mm(x1), mm(y1), mm(z1)
 
-    #position at t4
+    #position at t2
     z2 = (f*B*G)/((-X2*(E*A - B*D))-(f*(E*C - B*F)))
     y2 = -Y2*z2/f
     x2 = X2*z2/f
+    print 'position2:',mm(x2),mm(y2), mm(z2)
     
-    print 'position:',mm(x2),mm(y2), mm(z2)
     #velocity in each direction mm/s
     vx = (x2 - x1)/(t[1] - t[0])
     vy = (y2 - y1)/(t[1] - t[0])

@@ -146,7 +146,8 @@ def getMetrics(l1,r1,l2,r2,t,f,b):
     #print 'px per mm', pixel_length(100.0, 150.0, 512.0, 4.0)
     return (mm(X1), mm(Y1), mm(Z1))
 
-def getPosition(l1, l2, r1, r2, f, res, c):
+#new projective geometry method for getting location
+def getPosition(l1, l2, r1, r2, t, f, res, c):
     X1 = l1[0] - (res[0]/2)
     X2 = l2[0] - (res[0]/2)
     X3 = r1[0] - (res[0]/2)
@@ -196,11 +197,32 @@ def getPosition(l1, l2, r1, r2, f, res, c):
     G = (D*Xc + E*Yc + F*Zc)
     
     #position at t1
-    z = (f*B*G)/((-X1*(E*A - B*D))-(f*(E*C - B*F)))
-    y=-Y1*z/f
-    x=X1*z/f
+    z1 = (f*B*G)/((-X1*(E*A - B*D))-(f*(E*C - B*F)))
+    y1 = -Y1*z1/f
+    x1 = X1*z1/f
     
-    print 'vector position:', mm(x), mm(y), mm(z)
+    print 'position:', mm(x1), mm(y1), mm(z1)
+
+    #position at t4
+    z2 = (f*B*G)/((-X2*(E*A - B*D))-(f*(E*C - B*F)))
+    y2 = -Y2*z2/f
+    x2 = X2*z2/f
+    
+    print 'position:',mm(x2),mm(y2), mm(z2)
+    #velocity in each direction mm/s
+    vx = (x2 - x1)/(t[1] - t[0])
+    vy = (y2 - y1)/(t[1] - t[0])
+    vz = (z2 - z1)/(t[1] - t[0])
+    
+    #overall velocity
+    #v = (abs(vx**3) + abs(vy**3) + abs(vz**3))**(1/3.0)
+    v = (((x2 - x1)**2) + ((y2 - y1)**2) + ((z2 - z1)**2))**(1/2.0)
+    v/=float(t[1] - t[0])
+    print 'x diff',mm(x2 - x1)
+    print 'y diff',mm(y2 - y1)
+    print 'z diff',mm(z2 - z1)
+    print 't diff',(t[2] - t[0])
+    print 'velocity:',mm(v)
 
 def mathExample():
     #relative time between each photo

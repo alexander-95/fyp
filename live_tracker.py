@@ -11,20 +11,20 @@ threshVal = 50
 counter = 0
 crosshairs_enabled = True
 centroids_enabled = True
-kernel = np.ones((13,13),np.uint8)#used for image closing
-t = [0,0,0,0]# list of timestamps
-frame = [0,0,0,0]#list of images
-preview = [0,0,0,0]#list of preview frames
+kernel = np.ones((13, 13),np.uint8)#used for image closing
+t = [0, 0, 0, 0]# list of timestamps
+frame = [0, 0, 0, 0]#list of images
+preview = [0, 0, 0, 0]#list of preview frames
 
 #set up first camera
 capL = cv2.VideoCapture(2)
-capL.set(3,res[0])
-capL.set(4,res[1])
+capL.set(3, res[0])
+capL.set(4, res[1])
 
 #set up second camera
 capR = cv2.VideoCapture(1)
-capR.set(3,res[0])
-capR.set(4,res[1])
+capR.set(3, res[0])
+capR.set(4, res[1])
 
 #take the first 4 images
 for i in xrange(4):
@@ -39,13 +39,13 @@ for i in xrange(4):
 #find objects in an image using thresholding/blob detection
 def findObjects(frame):
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    frame = cv2.GaussianBlur(frame,(blurVal,blurVal),0)
+    frame = cv2.GaussianBlur(frame, (blurVal,blurVal), 0)
     cv2.threshold(frame, threshVal, 255, cv2.THRESH_BINARY, frame)
     frame = cv2.morphologyEx(frame, cv2.MORPH_CLOSE, kernel)
-    contours, hierarchy = cv2.findContours(frame.copy(), cv2.RETR_LIST,cv2.CHAIN_APPROX_NONE)
+    contours, hierarchy = cv2.findContours(frame.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
     moments = [cv2.moments(cnt) for cnt in contours]
     centroids = [(int (round(m['m10']/m['m00'])), int(round(m['m01']/m['m00']))) for m in moments if m['m00']!=0]
-    if len(centroids)>0:
+    if len(centroids) > 0:
         centroids.pop()
     return centroids
 
@@ -64,9 +64,9 @@ while True:
 
     if centroids_enabled:#highlight centroids
         for centroid in l2:
-            cv2.circle(frame[1],centroid,5,(255,255,0),thickness=2)
+            cv2.circle(frame[1], centroid, 5, (255, 255, 0),thickness = 2)
         for centroid in r2:
-            cv2.circle(frame[3],centroid,5,(255,255,0),thickness=2)
+            cv2.circle(frame[3], centroid, 5, (255, 255, 0),thickness = 2)
 
     for i in xrange(4):#generate scaled down preview images
         preview[i] = (cv2.resize(frame[0], (0,0), fx=0.5, fy=0.5))
@@ -82,7 +82,7 @@ while True:
         print
         counter+=1
         print 'interval',counter
-        getPosition(l1[0],l2[0],r1[0],r2[0],t,4,res,[105,0,0])
+        getPosition(l1[0], l2[0], r1[0], r2[0], t, 4, res, [105, 0, 0])
 
     #break out of the loop if the c key is pressed
     if cv2.waitKey(1) & 0xFF == ord('c'):

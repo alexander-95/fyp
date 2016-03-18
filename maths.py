@@ -1,26 +1,15 @@
 import math
 import numpy as np
 
-#get the length of a line
-def length(p1,p2):
-    x = (p2[0] - p1[0])
-    y = (p2[1] - p1[1])
-    length = math.sqrt(x*x + y*y)
-    return length
-
-#get the size of a pixel
-def pixel_length(x1, y1, x2, f):
-    return (x2*y1)/(x1*f)
-
 #convert mm to px
 def px(x):
-    return x*222#192
-    #return x*357
+    #return x*222#192
+    return x*357
 
 #convert px to mm
 def mm(x):
-    return x/222
-    #return x/357
+    #return x/222
+    return x/357
 
 ##############################################
 # Mathematical equations for entity tracking #
@@ -164,30 +153,6 @@ def getPosition(l1, l2, r1, r2, t, f, res, c):
 
     f = px(float(f))
 
-    #import pdb; pdb.set_trace()
-
-    # vectors
-    # t1 = < -X1z1/f, -Y1z1/f, z1 >
-    # t2 = < -X2z2/f, -Y2z2/f, z2 >
-    # t3 = < -X3z3/f, -Y3z3/f, z3 >
-    # t4 = < -X4z4/f, -Y4z4/f, z4 >
-    #
-    # n1 = t1 X t2
-    # n2 = t3 X t4
-    #
-    # n1 = < Y2-Y1, X1-X2, (X1Y2-X2Y1)/f >
-    # n2 = < Y4-Y3, X3-X4, (X3Y4-X4Y3)/f > + (Xc, Yc, Zc)
-    #
-    # normal vector = <a,b,c>
-    # plane = ax + by + cz + d = 0
-    #
-    # p1 = (Y2-Y1)x + (X1-X2)y + ((X1Y2-X2Y1)/f)z = 0
-    # p2 = ((Y4-Y3)+Xc)x + ((X3-X4)+Yc)y + (((X3Y4-X4Y3)/f)+Zc)z + d = 0
-    # d = -((Y4-Y3)+Xc)Xc - ((X3-X4)+Yc)Yc - (((X3Y4-X4Y3)/f)+Zc)Zc
-    # 
-    # p1 = Ax + By + Cz = 0
-    # p2 = Dx + Ey + Fz + G = 0
-
     A = Y2 - Y1
     B = X1 - X2
     C = (X2*Y1 - X1*Y2)/f
@@ -208,19 +173,9 @@ def getPosition(l1, l2, r1, r2, t, f, res, c):
     x2 = X2*z2/f
     print 'position2:',mm(x2),mm(y2), mm(z2)
     
-    #velocity in each direction mm/s
-    vx = (x2 - x1)/(t[1] - t[0])
-    vy = (y2 - y1)/(t[1] - t[0])
-    vz = (z2 - z1)/(t[1] - t[0])
-    
     #overall velocity
-    #v = (abs(vx**3) + abs(vy**3) + abs(vz**3))**(1/3.0)
     v = (((x2 - x1)**2) + ((y2 - y1)**2) + ((z2 - z1)**2))**(1/2.0)
     v/=float(t[1] - t[0])
-    print 'x diff',mm(x2 - x1)
-    print 'y diff',mm(y2 - y1)
-    print 'z diff',mm(z2 - z1)
-    print 't diff',(t[2] - t[0])
     print 'velocity:',mm(v)
 
 def mathExample():

@@ -3,13 +3,16 @@ from time import time, sleep
 import numpy as np
 from maths import getMetrics, getLocation, getPosition
 
-#res = [1280, 720]
-delay = 0.1
+res = [1280, 720]
+delay = 0.0
 blurVal = 13
+threshVal = 50
 counter = 0
-res = [640, 480]
+#res = [640, 480]
 crosshairs_enabled = True
 centroids_enabled = True
+kernel = np.ones((13,13),np.uint8)#used for image closing
+t = [0,0,0,0]# list of timestamps
 
 capL = cv2.VideoCapture(1)
 #capL.open('http://192.168.43.180:8081/video.mjpeg')
@@ -22,11 +25,6 @@ capR = cv2.VideoCapture(0)
 #capR.open('http://192.168.1.116:8081/videp.mjpeg')
 capR.set(3,res[0])
 capR.set(4,res[1])
-
-#kernel for image closing
-kernel = np.ones((13,13),np.uint8)
-#times for each photo
-t = [0,0,0,0]
 
 ret, frame1 = capL.read()
 t[0] = time()
@@ -44,7 +42,7 @@ sleep(delay)
 def findObjects(frame):
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     frame = cv2.GaussianBlur(frame,(blurVal,blurVal),0)
-    cv2.threshold(frame, 50, 255, cv2.THRESH_BINARY, frame)
+    cv2.threshold(frame, threshVal, 255, cv2.THRESH_BINARY, frame)
     frame = cv2.morphologyEx(frame, cv2.MORPH_CLOSE, kernel)
     contours, hierarchy = cv2.findContours(frame.copy(), cv2.RETR_LIST,cv2.CHAIN_APPROX_NONE)
     moments = [cv2.moments(cnt) for cnt in contours]
@@ -93,10 +91,8 @@ while True:
         print
         counter+=1
         print 'interval',counter
-        getPosition(l1[0],l2[0],r1[0],r2[0],t,4,res,[85,0,0])
+        getPosition(l1[0],l2[0],r1[0],r2[0],t,4,res,[105,0,0])
 
-    #no more calculations past this point
-    
     #break out of the loop if the c key is pressed
     if cv2.waitKey(1) & 0xFF == ord('c'):
         break

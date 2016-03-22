@@ -11,8 +11,11 @@ HEIGHT = 9
 objp = np.zeros((WIDTH*HEIGHT,3), np.float32)
 objp[:,:2] = np.mgrid[0:HEIGHT,0:WIDTH].T.reshape(-1,2)
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(2)
+cap.set(3,1280)
+cap.set(4,720)
 def calibration():
+    counter = 0
     camera = []
     while (True):
         objpoints = [] # 3d point in real world space
@@ -29,9 +32,11 @@ def calibration():
             #rodrigues rotation vectors, translation vectors
             ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1],None,None)
             if cv2.waitKey(1) & 0xFF == ord(' '):
+                counter+=1
+                print 'counter:', counter
                 print mtx
                 camera.append(mtx)
-                cv2.imwrite('img.png', gray)
+                #cv2.imwrite('img.png', img)
         cv2.imshow('img',img)
         #print 'b',x,y,w,h
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -39,7 +44,6 @@ def calibration():
             camera = sum(camera)
             camera = camera/num
             print "matrix estimation:",camera
-            print mtx
             break
 
 def AugmentedReality():
@@ -102,10 +106,10 @@ def undistortImage(img):
         if w!=0:
             cv2.imshow('img',img)
 
-#calibration()
-image = cv2.imread('img.png')
-undistortImage(image)
-AugmentedReality()
+calibration()
+#image = cv2.imread('img.png')
+#undistortImage(image)
+#AugmentedReality()
 # release everything
 cap.release()
 cv2.destroyAllWindows()

@@ -15,6 +15,8 @@ kernel = np.ones((13, 13),np.uint8)#used for image closing
 t = [0, 0, 0, 0]# list of timestamps
 frame = [0, 0, 0, 0]#list of images
 preview = [0, 0, 0, 0]#list of preview frames
+c1 = [659, 366]
+c2 = [633, 332]
 
 #set up first camera
 capL = cv2.VideoCapture(2)
@@ -57,10 +59,10 @@ while True:
     r2 = findObjects(frame[3])
 
     if crosshairs_enabled:#draw crosshairs
-        cv2.line(frame[1], (0, res[1]/2), (res[0], res[1]/2), (0, 0, 255))
-        cv2.line(frame[1], (res[0]/2, 0), (res[0]/2, res[1]), (0, 0, 255))
-        cv2.line(frame[3], (0, res[1]/2), (res[0], res[1]/2), (0, 0, 255))
-        cv2.line(frame[3], (res[0]/2, 0), (res[0]/2, res[1]), (0, 0, 255))
+        cv2.line(frame[1], (0, c1[1]), (res[0], c1[1]), (0, 0, 255))
+        cv2.line(frame[1], (c1[0], 0), (c1[0], res[1]), (0, 0, 255))
+        cv2.line(frame[3], (0, c2[1]), (res[0], c2[1]), (0, 0, 255))
+        cv2.line(frame[3], (c2[0], 0), (c2[0], res[1]), (0, 0, 255))
 
     if centroids_enabled:#highlight centroids
         for centroid in l2:

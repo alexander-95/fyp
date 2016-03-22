@@ -137,15 +137,18 @@ def getMetrics(l1,r1,l2,r2,t,f,b):
 
 #new projective geometry method for getting location
 def getPosition(l1, l2, r1, r2, t, f, res, c):
-    X1 = l1[0] - (res[0]/2)
-    X2 = l2[0] - (res[0]/2)
-    X3 = r1[0] - (res[0]/2)
-    X4 = r2[0] - (res[0]/2)
+    c1 = [659, 366]
+    c2 = [633, 332]
 
-    Y1 = l1[1] - (res[1]/2)
-    Y2 = l2[1] - (res[1]/2)
-    Y3 = r1[1] - (res[1]/2)
-    Y4 = r2[1] - (res[1]/2)
+    X1 = l1[0] - c1[0]#(res[0]/2)
+    X2 = l2[0] - c1[0]#(res[0]/2)
+    X3 = r1[0] - c2[0]#(res[0]/2)
+    X4 = r2[0] - c2[0]#(res[0]/2)
+
+    Y1 = l1[1] - c1[1]#(res[1]/2)
+    Y2 = l2[1] - c1[1]#(res[1]/2)
+    Y3 = r1[1] - c2[1]#(res[1]/2)
+    Y4 = r2[1] - c2[1]#(res[1]/2)
 
     Xc = px(c[0])
     Yc = px(c[1])

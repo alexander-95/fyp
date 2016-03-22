@@ -69,7 +69,7 @@ while True:
             cv2.circle(frame[3], centroid, 5, (255, 255, 0),thickness = 2)
 
     for i in xrange(4):#generate scaled down preview images
-        preview[i] = (cv2.resize(frame[0], (0,0), fx=0.5, fy=0.5))
+        preview[i] = (cv2.resize(frame[i], (0,0), fx=0.5, fy=0.5))
         cv2.imshow('frame'+str(i), preview[i])
 
     if cv2.waitKey(1) & 0xFF == ord(' '):#save images
@@ -101,3 +101,7 @@ while True:
     ret, frame[3] = capR.read()
     sleep(delay)
     t[3] = time()
+
+capL.release()
+capR.release()
+cv2.destroyAllWindows()

@@ -14,7 +14,6 @@ def findObjects(frame):
 
 cap = cv2.VideoCapture()
 cap.open('http://192.168.0.4:8080/video?.avi')
-cap.open(0)
 resolution = (int(cap.get(3)), int(cap.get(4)))
 cap.set(5,10)
 counter = 0
@@ -38,8 +37,8 @@ while True:
     diff = cv2.cvtColor(diff, cv2.COLOR_GRAY2BGR)
     for c in centroids:
         cv2.circle(diff,c,5,(255,255,0),2)
-    cv2.imshow('diff', diff)
-    cv2.imshow('frame', frame1)
+    #cv2.imshow('diff', diff)
+    #cv2.imshow('frame', frame1)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         quit()
     if len(centroids) > 0:
@@ -50,7 +49,7 @@ while True:
         print 'recording: counter =', counter
         video.write(frame1)
         counter+=1
-    elif counter == 20:
+    elif counter == limit:
         print 'starting new video file'
         filename = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')+'.avi'
         video.release()
